@@ -386,17 +386,7 @@ main{max-width:1180px;padding-top:22px}
 <label class="full">Onde vai regar?<select id="ast"><option value="r">Relvado e jardim</option><option value="c">Canteiros, sebes e arbustos</option><option value="f">Faixas estreitas e bermas</option><option value="g">Grandes áreas, parques e campos desportivos</option><option value="a">Qualquer situação</option></select></label>
 <div class="full"><div class="subtabs"><button type="button" class="stb on" data-tp="aspersor">Aspersores</button><button type="button" class="stb" data-tp="pulverizador">Pulverizadores e bicos</button></div><input id="atp" type="hidden" value="aspersor"></div>
 </div></section>
-<section style="padding:14px"><h2>Área a regar</h2><div class="grid">
-<label class="full">Forma da área<select id="ash"><option value="ret">Retângulo</option><option value="area">Só tenho a área (m²)</option><option value="L">Forma em L</option><option value="tri">Triângulo</option><option value="trap">Trapézio</option><option value="circ">Círculo</option><option value="free">Desenhar à mão (clicar no quadro)</option></select></label>
-<label id="apl1"><span>Comprimento (m)</span><input id="ap1" type="number" inputmode="decimal" value="20"></label>
-<label id="apl2"><span>Largura (m)</span><input id="ap2" type="number" inputmode="decimal" value="12"></label>
-<label id="apl3" hidden><span></span><input id="ap3" type="number" inputmode="decimal"></label>
-<label id="apl4" hidden><span></span><input id="ap4" type="number" inputmode="decimal"></label>
-<label class="full">Disposição<select id="asd"><option value="q">Quadrado</option><option value="t">Triangular</option></select></label>
-<label class="full">Espaçamento<select id="aes"><option value="e">Económico (menos unidades)</option><option value="c">Cabeça a cabeça (máxima uniformidade)</option></select></label>
-</div>
-<div id="afreeb" hidden style="margin-top:8px"><button class="btn2" type="button" id="afu">Anular último ponto</button> <button class="btn2" type="button" id="afc">Limpar</button><p class="hint">Toque no quadro para marcar os cantos da área (mínimo 3 pontos), em passos de 0,5 m.</p></div>
-<div id="abase" style="margin-top:10px"></div></section>
+
 <section style="padding:14px"><h2>Pressão e caudal</h2>
 <label class="chk"><input type="checkbox" id="ap">Contar com a bomba escolhida no separador Bombas</label>
 <div id="apinfo" class="hint"></div>
@@ -405,7 +395,18 @@ main{max-width:1180px;padding-top:22px}
 <section id="achs" class="res" style="padding:14px" hidden></section>
 <section style="padding:14px"><h2 id="alh">Modelos</h2><div id="alist"></div></section>
 <section style="padding:14px"><div id="adet"></div></section>
-<section class="res"><div class="tabs" id="avt" style="margin:0 0 12px"><button type="button" class="tab on" id="avd">Desenho da rega</button><button type="button" class="tab" id="avm">Mapa</button></div><div id="adw"><p class="hint">Escolha um modelo para ver o desenho.</p></div>
+<section class="res"><div class="tabs" id="avt" style="margin:0 0 12px"><button type="button" class="tab on" id="avd">Desenho da rega</button><button type="button" class="tab" id="avm">Mapa</button></div><div id="adf" class="grid" style="margin-bottom:8px"><label class="full">Forma da área<select id="ash"><option value="ret">Retângulo</option><option value="area">Só tenho a área (m²)</option><option value="L">Forma em L</option><option value="tri">Triângulo</option><option value="trap">Trapézio</option><option value="circ">Círculo</option><option value="free">Desenhar à mão (clicar no quadro)</option></select></label>
+<label id="apl1"><span>Comprimento (m)</span><input id="ap1" type="number" inputmode="decimal" value="20"></label>
+<label id="apl2"><span>Largura (m)</span><input id="ap2" type="number" inputmode="decimal" value="12"></label>
+<label id="apl3" hidden><span></span><input id="ap3" type="number" inputmode="decimal"></label>
+<label id="apl4" hidden><span></span><input id="ap4" type="number" inputmode="decimal"></label>
+</div>
+<div class="grid" id="adc" style="margin-bottom:8px"><label class="full">Disposição<select id="asd"><option value="q">Quadrado</option><option value="t">Triangular</option></select></label>
+<label class="full">Espaçamento<select id="aes"><option value="e">Económico (menos unidades)</option><option value="c">Cabeça a cabeça (máxima uniformidade)</option></select></label>
+</div>
+<div id="adf2"><div id="afreeb" hidden style="margin-top:8px"><button class="btn2" type="button" id="afu">Anular último ponto</button> <button class="btn2" type="button" id="afc">Limpar</button><p class="hint">Toque no quadro para marcar os cantos da área (mínimo 3 pontos), em passos de 0,5 m.</p></div>
+<div id="abase" style="margin-top:10px"></div></div>
+<div id="adw"><p class="hint">Escolha um modelo para ver o desenho.</p></div>
 <div id="amap" hidden>
 <div class="grid" style="margin-bottom:8px"><label>Mapa<select id="mprov"><option value="free">Gratuito (satélite Esri / OpenStreetMap)</option><option value="google">Google Maps (com chave)</option></select></label><label>Vista<select id="mlay"><option value="sat">Satélite</option><option value="map">Mapa</option></select></label></div>
 <div id="mkeyb" hidden class="box" style="margin-bottom:8px"><label>Chave da API do Google Maps<input id="mkey" type="text" autocomplete="off" placeholder="AIza…"></label><button class="btn2" type="button" id="mkeyok">Usar esta chave</button><p class="hint">Crie a chave em console.cloud.google.com (ative “Maps JavaScript API” e a faturação) e restrinja-a ao endereço deste site. Fica guardada só neste navegador.</p></div>
@@ -993,7 +994,7 @@ document.addEventListener('pointerdown',function(e){var t=e.target.closest&&e.ta
 document.addEventListener('pointermove',function(e){if(!MDR)return;if(!MDR.moved&&Math.hypot(e.clientX-MDR.x,e.clientY-MDR.y)<6)return;MDR.moved=1;var r=$('mpv').getBoundingClientRect(),q=MP.v.ll(e.clientX-r.left,e.clientY-r.top);
 if(MDR.v!=null){MP.pts[+MDR.v]=q;mapDraw()}else if(mSame()){var p=mXY(q[0],q[1],MP.O);p=[Math.round(p[0]*10)/10,Math.round(p[1]*10)/10];var kk=MDR.k;if(kk.charAt(0)==='m')AED.mv[+kk.slice(1)]=p;else AED.add[+kk.slice(1)]=p;AED.sel=kk;aRender()}});
 document.addEventListener('pointerup',function(){if(!MDR)return;var d=MDR;MDR=null;if(d.v!=null){if(d.moved){if(MP.closed)mSync();else{mSave();mapDraw()}}else if(MP.draw&&+d.v===0&&MP.pts.length>=3)mFin()}else if(!d.moved){AED.sel=d.k;aRender()}},true);
-function mShow(on){MP.vis=on;$('adw').hidden=on;$('adh').hidden=on;$('amap').hidden=!on;$('avd').classList.toggle('on',!on);$('avm').classList.toggle('on',on);if(on){if(MP.closed)mSync();mInit()}}
+function mShow(on){MP.vis=on;$('adw').hidden=on;$('adh').hidden=on;$('adf').hidden=on;$('adf2').hidden=on;$('amap').hidden=!on;$('avd').classList.toggle('on',!on);$('avm').classList.toggle('on',on);if(on){if(MP.closed)mSync();mInit()}}
 $('avd').addEventListener('click',function(){mShow(false)});$('avm').addEventListener('click',function(){mShow(true)});
 window.addEventListener('resize',function(){if(MP.vis&&MP.v&&MP.v.tiles){MP.v.tiles();mapDraw()}});
 function aOpenS(s,P){var h='<h2>'+s.marca+' '+s.nome+'</h2><div class="hint">'+s.info+'</div><h3>Códigos do fornecedor</h3>'+(s.cod.length?s.cod.map(function(c){return '<div>'+c[0]+' · '+c[1]+'</div>'}).join(''):'<div class="hint">Sem código listado.</div>');
