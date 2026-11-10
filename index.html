@@ -294,6 +294,7 @@ body.orgm #orgbar{display:flex}
 .osel{outline:2px solid #ff8a1f!important;outline-offset:2px;cursor:move}
 body.orgf{cursor:move}body.orgf *{-webkit-user-select:none;user-select:none}
 .ohid{display:none!important}
+.om,#orgbar .of{display:none!important}
 @media(max-width:860px){#orgbar{bottom:88px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -1075,7 +1076,7 @@ Object.keys(FR).forEach(function(k){var el=FM[k],v=FR[k];if(!el)return;if(v.x||v
 function fsave(){try{localStorage.setItem('ir_free',JSON.stringify(FR))}catch(x){}}
 function fres(t){while(t&&t!==document.body){if(t._fk)return t;t=t.parentElement}return null}
 function fsel(el){if(FS)FS.classList.remove('osel');FS=el;if(el)el.classList.add('osel')}
-function setMode(m){MODE=m;document.body.classList.toggle('orgf',m==='f');document.getElementById('omL').classList.toggle('on',m==='l');document.getElementById('omF').classList.toggle('on',m==='f');document.getElementById('omt').textContent=m==='l'?'Arraste os separadores ou o botão ⠿ Mover de cada área':'Toque num elemento e arraste-o para onde quiser';fsel(null);handles()}
+function setMode(m){MODE=m;document.body.classList.toggle('orgf',m==='f');document.getElementById('omL').classList.toggle('on',m==='l');document.getElementById('omF').classList.toggle('on',m==='f');document.getElementById('omt').textContent=m==='l'?'Arraste um bloco para cima de outro: trocam de lugar':'Toque num elemento e arraste-o para onde quiser';fsel(null);handles()}
 document.getElementById('omL').addEventListener('click',function(){setMode('l')});document.getElementById('omF').addEventListener('click',function(){setMode('f')});
 function fcur(el){return FR[el._fk]||{x:0,y:0}}
 function fset(el,x,y){var v=FR[el._fk]||(FR[el._fk]={x:0,y:0});v.x=x;v.y=y;el.style.translate=x+'px '+y+'px'}
@@ -1089,9 +1090,10 @@ function horiz(c){var v=c.items.filter(function(o){return o.getClientRects().len
 document.addEventListener('pointerdown',function(e){if(!on||e.button>0||MODE!=='l')return;var t=e.target,h=t.closest&&t.closest('.ogh'),c=null,el=null;if(h){c=h._ct;el=h._el;e.preventDefault()}else{for(var i=0;i<CT.length&&!el;i++){if(!CT[i].btn)continue;var it=t.closest&&t.closest('.og');if(it&&it._ct===CT[i]&&CT[i].items.indexOf(it)>=0){c=CT[i];el=it}}}
 if(!el)return;D={c:c,el:el,x:e.clientX,y:e.clientY,m:0,btn:c.btn}},true);
 document.addEventListener('pointermove',function(e){if(!D||MODE!=='l')return;if(!D.m){if(Math.hypot(e.clientX-D.x,e.clientY-D.y)<6)return;D.m=1;D.el.classList.add('dragging');document.body.style.userSelect='none'}
-var c=D.c,el=D.el,hz=horiz(c),p=hz?e.clientX:e.clientY,vis=cur(c).filter(function(o){return o!==el&&o.getClientRects().length}),tg=null;
-for(var i=0;i<vis.length;i++){var r=vis[i].getBoundingClientRect(),mid=hz?r.left+r.width/2:r.top+r.height/2;if(mid>p){tg=vis[i];break}}
-var par=el.parentNode;if(tg){if(el.nextSibling!==tg)par.insertBefore(el,tg)}else if(vis.length){var last=vis[vis.length-1];if(last.nextSibling!==el)par.insertBefore(el,last.nextSibling)}
+var c=D.c,el=D.el;if(!D.ord){D.ord=cur(c);D.ei=D.ord.indexOf(el);D.sw=null}
+var hit=null,vis=D.ord.filter(function(o){return o!==el&&o.getClientRects().length});
+for(var i=0;i<vis.length;i++){var r=vis[i].getBoundingClientRect();if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){hit=vis[i];break}}
+if(hit){if(hit===D.sw){place(c,D.ord);D.sw=null}else{var o=D.ord.slice();o[D.ei]=hit;o[D.ord.indexOf(hit)]=el;D.sw=hit;place(c,o)}}
 if(e.clientY<70)window.scrollBy(0,-16);else if(e.clientY>window.innerHeight-70)window.scrollBy(0,16)});
 function end(){if(!D)return;var d=D;D=null;document.body.style.userSelect='';d.el.classList.remove('dragging');if(d.m){SUP=true;setTimeout(function(){SUP=false},0);OR[d.c.key]=cur(d.c).map(function(o){return o._ok});save()}}
 document.addEventListener('pointerdown',function(e){if(!on||MODE!=='f'||e.button>0)return;var t=e.target;if(t.closest&&(t.closest('#orgbar')||t.closest('#orgb')))return;var el=fres(t);if(!el)return;e.preventDefault();e.stopPropagation();fsel(el);var c=fcur(el);FD={el:el,x:e.clientX,y:e.clientY,ox:c.x,oy:c.y,m:0}},true);
