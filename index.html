@@ -187,6 +187,10 @@ section.res{border:1px solid var(--g-bd);border-top:2px solid var(--neon2);box-s
 #mdl,#amd{background:rgba(3,10,18,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 @media (prefers-reduced-motion:no-preference){main>*{animation:fin .45s ease both}@keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){details,section,.tabs,.mbox{background:var(--card)}}
+
+#mpv{position:relative;height:min(62vh,540px);min-height:340px;margin:8px 0;border-radius:14px;overflow:hidden;background:#cfd8dc;touch-action:none;cursor:grab;border:1px solid var(--line);user-select:none;-webkit-user-select:none}
+.mctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px;z-index:3}.mctl button{margin:0;width:36px;height:36px;padding:0;font-size:1.25rem;border-radius:10px}
+.matt{position:absolute;left:0;bottom:0;font:10px/1.5 sans-serif;color:#222;background:rgba(255,255,255,.78);padding:1px 6px;z-index:3;pointer-events:none}
 </style>
 </head>
 <body>
@@ -299,6 +303,7 @@ section.res{border:1px solid var(--g-bd);border-top:2px solid var(--neon2);box-s
 <label id="apl3" hidden><span></span><input id="ap3" type="number" inputmode="decimal"></label>
 <label id="apl4" hidden><span></span><input id="ap4" type="number" inputmode="decimal"></label>
 <label class="full">Disposição<select id="asd"><option value="q">Quadrado</option><option value="t">Triangular</option></select></label>
+<label class="full">Espaçamento<select id="aes"><option value="e">Económico (menos unidades)</option><option value="c">Cabeça a cabeça (máxima uniformidade)</option></select></label>
 </div>
 <div id="afreeb" hidden style="margin-top:8px"><button class="btn2" type="button" id="afu">Anular último ponto</button> <button class="btn2" type="button" id="afc">Limpar</button><p class="hint">Toque no quadro para marcar os cantos da área (mínimo 3 pontos), em passos de 0,5 m.</p></div>
 <div id="abase" style="margin-top:10px"></div></section>
@@ -310,8 +315,17 @@ section.res{border:1px solid var(--g-bd);border-top:2px solid var(--neon2);box-s
 <section id="achs" class="res" style="padding:14px" hidden></section>
 <section style="padding:14px"><h2 id="alh">Modelos</h2><div id="alist"></div></section>
 <section style="padding:14px"><div id="adet"></div></section>
-<section class="res"><h2>Desenho da rega</h2><div id="adw"><p class="hint">Escolha um modelo para ver o desenho.</p></div>
-<p class="hint">Disposição cabeça a cabeça (espaçamento igual ao raio). Os arcos de cada unidade ajustam-se aos cantos e bordos da área. A zona a laranja tracejado mostra o alcance total de cada unidade, incluindo a água que cai fora da área. Caudais em m³/h por unidade. Catálogo Cudell 2026.</p></section>
+<section class="res"><div class="tabs" id="avt" style="margin:0 0 12px"><button type="button" class="tab on" id="avd">Desenho da rega</button><button type="button" class="tab" id="avm">Mapa</button></div><div id="adw"><p class="hint">Escolha um modelo para ver o desenho.</p></div>
+<div id="amap" hidden>
+<div class="grid" style="margin-bottom:8px"><label>Mapa<select id="mprov"><option value="free">Gratuito (satélite Esri / OpenStreetMap)</option><option value="google">Google Maps (com chave)</option></select></label><label>Vista<select id="mlay"><option value="sat">Satélite</option><option value="map">Mapa</option></select></label></div>
+<div id="mkeyb" hidden class="box" style="margin-bottom:8px"><label>Chave da API do Google Maps<input id="mkey" type="text" autocomplete="off" placeholder="AIza…"></label><button class="btn2" type="button" id="mkeyok">Usar esta chave</button><p class="hint">Crie a chave em console.cloud.google.com (ative “Maps JavaScript API” e a faturação) e restrinja-a ao endereço deste site. Fica guardada só neste navegador.</p></div>
+<div class="grid" style="grid-template-columns:1fr auto auto;margin-bottom:8px"><input id="mq" type="text" autocomplete="off" placeholder="Procurar morada, local ou coordenadas"><button class="btn2" type="button" id="mgo" style="margin:0">Procurar</button><button class="btn2" type="button" id="mloc" style="margin:0">Localização</button></div>
+<div class="aed"><button class="btn2" type="button" id="mdraw">✏ Desenhar terreno</button><button class="btn2" type="button" id="mfin" disabled>✔ Terminar</button><button class="btn2" type="button" id="mundo" disabled>↶ Anular ponto</button><button class="btn2" type="button" id="mclr" disabled>🗑 Limpar terreno</button></div>
+<div id="mpv"></div>
+<div class="aed"><button class="btn2" type="button" id="madd" disabled>➕ Adicionar pontos</button><button class="btn2" type="button" id="mdel" disabled>🗑 Eliminar ponto</button><button class="btn2" type="button" id="mall" disabled>🗑 Eliminar todos</button><button class="btn2" type="button" id="mrst" disabled>↺ Repor automático</button></div>
+<p class="hint" id="mmsg"></p><div id="msum" class="box"></div>
+<p class="hint">O terreno desenhado no mapa passa a ser a área usada no cálculo (medida em metros reais). Arraste os pontos verdes para os mover e os amarelos para ajustar o contorno. As opções de Espaçamento e de modelo valem tal como no desenho.</p></div>
+<p class="hint" id="adh">No modo Económico procura-se o menor número de unidades que cobre toda a área, mantendo a uniformidade perto da disposição cabeça a cabeça (espaçamento igual ao raio), que pode escolher em Espaçamento. Os arcos de cada unidade ajustam-se aos cantos e bordos da área. A zona a laranja tracejado mostra o alcance total de cada unidade, incluindo a água que cai fora da área. Caudais em m³/h por unidade. Catálogo Cudell 2026.</p></section>
 </div>
 <div id="mR" hidden>
 <h1>Rega e tubagem</h1>
@@ -690,12 +704,34 @@ if(H.length>800)return {many:1};
 return {H:H.map(function(p){var inn=[];for(var a=0;a<360;a+=5){var t=a*Math.PI/180;inn.push(pIn([p[0]+0.3*R*Math.cos(t),p[1]+0.3*R*Math.sin(t)],P))}
 var best=0,bs=0,run=0,rs=0;for(var k=0;k<144;k++){var v=inn[k%72];if(v){if(!run)rs=k;run++;if(run>best&&run<=72){best=run;bs=rs}}else run=0}
 var arc=best>=71?360:Math.min(360,best*5+5),a0=best>=71?0:(bs*5-5);[90,180,270,360].forEach(function(k){if(Math.abs(arc-k)<=20)arc=k});if(arc<30)arc=30;if(arc===360)a0=0;return {x:p[0],y:p[1],a0:a0,A:arc}}),A:A}}
+
+var AECO={};
+function aArc(p,P,R){var inn=[];for(var a=0;a<360;a+=5){var t=a*Math.PI/180;inn.push(pIn([p[0]+0.3*R*Math.cos(t),p[1]+0.3*R*Math.sin(t)],P))}
+var best=0,bs=0,run=0,rs=0;for(var k=0;k<144;k++){var v=inn[k%72];if(v){if(!run)rs=k;run++;if(run>best&&run<=72){best=run;bs=rs}}else run=0}
+var arc=best>=71?360:Math.min(360,best*5+5),a0=best>=71?0:(bs*5-5);[90,180,270,360].forEach(function(k){if(Math.abs(arc-k)<=20)arc=k});if(arc<30)arc=30;if(arc===360)a0=0;return {x:p[0],y:p[1],a0:a0,A:arc}}
+function aWaste(H,P,R){var o=0,t=0;H.forEach(function(h){for(var i=0;i<48;i++){var r=R*Math.sqrt((i+0.5)/48),g=(h.a0+h.A*((i*0.6180339887)%1))*Math.PI/180;t++;if(!pIn([h.x+r*Math.cos(g),h.y+r*Math.sin(g)],P))o++}});return t?o/t:0}
+function aEvalH(H,S,R,mu){var cov=0,vs=[],R2=R*R,unc=0;for(var i=0;i<S.length;i++){var q=S[i],v=0;for(var j=0;j<H.length;j++){var h=H[j],dx=q[0]-h.x,dy=q[1]-h.y;if(dx*dx+dy*dy>R2)continue;if(h.A>=360)v+=1;else{var a=Math.atan2(dy,dx)*180/Math.PI;a=((a%360)+360)%360;var rel=(((a-h.a0)%360)+360)%360;if(rel<=h.A)v+=360/h.A}}vs.push(v);if(v>0)cov++;else if(mu!=null&&++unc>mu)return null}
+var m=0;vs.forEach(function(v){m+=v});m/=vs.length;var d=0;vs.forEach(function(v){d+=Math.abs(v-m)});var sv=vs.slice().sort(function(a,b){return a-b}),nq=Math.ceil(sv.length/4),lq=0;for(var k=0;k<nq;k++)lq+=sv[k];lq/=nq;return {cov:cov/S.length,cu:m>0?100*(1-d/vs.length/m):0,du:m>0?100*lq/m:0}}
+function aLayX(P,R,tri){var base=aLay(P,R,tri);if(base.many)return base;var eco=!$('aes')||$('aes').value!=='c',key=JSON.stringify([P,R,tri,eco]);
+if(AECO[key]){var c=AECO[key];return {H:c.H.map(function(h){return {x:h.x,y:h.y,a0:h.a0,A:h.A}}),A:c.A,cu:c.cu}}
+var xs=P.map(function(p){return p[0]}),ys=P.map(function(p){return p[1]}),x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs),y0=Math.min.apply(0,ys),y1=Math.max.apply(0,ys),w=x1-x0,h=y1-y0,res={H:base.H,A:base.A,cu:null};
+if(base.A/(R*R)<=150){var nxs=Math.max(2,Math.ceil(w/(R/8))),nys=Math.max(2,Math.ceil(h/(R/8))),S=[];for(var i=0;i<=nxs;i++)for(var j=0;j<=nys;j++){var q=[x0+0.1+(w-0.2)*i/nxs,y0+0.1+(h-0.2)*j/nys];if(pIn(q,P))S.push(q)}
+if(S.length){var bE=aEvalH(base.H,S,R);res.cu=bE.cu;
+if(eco){var best={H:base.H,n:base.H.length,cu:bE.cu,wz:9},minDU=0.85*bE.du,hor=w>=h,L=hor?w:h,Wd=hor?h:w,u0=hor?x0:y0,v0=hor?y0:x0,minCU=0.88*bE.cu,mk=function(u,v){return hor?[u,v]:[v,u]};
+[0.04,0.15,0.3,0.45].forEach(function(m){for(var ny=1;ny<=Math.ceil(Wd/R)+1;ny++)[0,1].forEach(function(stag){[0.04,0.15,0.3,0.45].forEach(function(mu){var my=m*R,mx=mu*R;
+for(var nx=2;nx<=Math.ceil(L/(R*0.6))+1;nx++){if(nx>=best.n)break;var pts=[],sx=(L-2*mx)/(nx-1);
+for(var a=0;a<ny;a++){var v=ny===1?v0+Wd/2:v0+my+a*(Wd-2*my)/(ny-1);for(var b=0;b<nx;b++){var u=u0+mx+b*sx+((stag&&a%2&&ny>1)?sx/2:0);if(u>u0+L-mx+1e-6)continue;pts.push(mk(u,v))}}
+if(pts.length>=best.n)continue;if(pts.some(function(p){return !pIn(p,P)}))continue;
+var H=pts.map(function(p){return aArc(p,P,R)}),e=aEvalH(H,S,R,Math.floor(S.length*0.005));
+if(e&&e.cu>=minCU&&e.du>=minDU){var wz=aWaste(H,P,R);if(wz<=0.3&&(H.length<best.n||(H.length===best.n&&wz<best.wz))){best={H:H,n:H.length,cu:e.cu,wz:wz}};if(wz<=0.3)break}}})})});
+if(best.H!==base.H){res={H:best.H,A:base.A,cu:best.cu}}}}}
+var ks=Object.keys(AECO);if(ks.length>80)delete AECO[ks[0]];AECO[key]=res;return {H:res.H.map(function(h){return {x:h.x,y:h.y,a0:h.a0,A:h.A}}),A:res.A,cu:res.cu}}
 function aQ(s,b,P,A){var z=aInt(b.r,P);if(!s.arcos)return z.q;var ks=Object.keys(s.arcos).map(Number).sort(function(a,b){return a-b}),lo=null,hi=null;ks.forEach(function(k){if(k<=A)lo=k;if(k>=A&&hi===null)hi=k});var q=function(k){return aInt(s.arcos[String(k)],P).q};if(lo===null)return q(hi)*A/hi;if(hi===null||lo===hi)return q(lo);return q(lo)+(A-lo)/(hi-lo)*(q(hi)-q(lo))}
 function aStrip(P,s,b,z){var xs=P.map(function(p){return p[0]}),ys=P.map(function(p){return p[1]}),x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs),y0=Math.min.apply(0,ys),y1=Math.max.apply(0,ys),w=x1-x0,h=y1-y0,hor=w>=h,ln=hor?w:h,n=Math.max(1,Math.ceil(ln/z.r-1e-6)),S=ln/n,H=[];for(var i=0;i<n;i++){var c=(i+0.5)*S;H.push({x:hor?x0+c:(x0+x1)/2,y:hor?(y0+y1)/2:y0+c,rect:hor?[S,s.larg]:[s.larg,S],A:0,a0:0})}return {H:H,A:Math.abs(pArea(P))}}
-function aEv(s,b,P,poly,tri,Qa){var z=aInt(b.r,P),R=z.r,L=s.faixa?aStrip(poly,s,b,{r:R}):aLay(poly,R,tri);if(L.many)return {many:1,b:b,R:R};
+function aEv(s,b,P,poly,tri,Qa){var z=aInt(b.r,P),R=z.r,L=s.faixa?aStrip(poly,s,b,{r:R}):aLayX(poly,R,tri);if(L.many)return {many:1,b:b,R:R};
 var qt=0;L.H.forEach(function(h){h.q=s.faixa?z.q:(s.arcos?aQ(s,b,P,h.A):z.q);qt+=h.q});
 var pr=L.H.reduce(function(a,h){return a+h.q*(s.faixa||!s.arcos?1:1)*(s.faixa?1:h.A/360)},0)*1000/L.A;
-return {b:b,R:R,z:z,H:L.H,qt:qt,h:L.H.length,pr:pr,zn:Qa>0?Math.ceil(qt/Qa-1e-9):1,hi2:pr>s.pmax*0.5&&!s.faixa&&pr>s.pmax?1:(pr>s.pmax?1:0),A:L.A}}
+return {b:b,R:R,z:z,H:L.H,cu:L.cu,qt:qt,h:L.H.length,pr:pr,zn:Qa>0?Math.ceil(qt/Qa-1e-9):1,hi2:pr>s.pmax*0.5&&!s.faixa&&pr>s.pmax?1:(pr>s.pmax?1:0),A:L.A}}
 function aEst(s,P,A,per,tri){var wid=4*A/per,best=null;
 s.bicos.forEach(function(b){var z=aInt(b.r,P),R=z.r;if(!s.faixa&&R>1.2*wid)return;if(s.faixa&&(wid>s.larg*1.3||wid<s.larg*0.3))return;if(s.arcos&&!(s.arcos['360']&&s.arcos['90']&&s.arcos['180']))return;
 var h=s.faixa?Math.ceil(Math.max(Math.sqrt(A),per/4)/R):Math.ceil(A/(R*R*(tri?0.866:1))+per/(2*R)),pr=z.q*1000/(R*R);var x={b:b,R:R,h:h,pr:pr,hi2:pr>s.pmax?1:0};if(!best||x.hi2<best.hi2||(x.hi2===best.hi2&&x.h<best.h))best=x});return best}
@@ -762,17 +798,17 @@ function aArcAt(x,y,R,P){var inn=[];for(var a=0;a<360;a+=5){var t=a*Math.PI/180;
 var best=0,bs=0,run=0,rs=0;for(var k=0;k<144;k++){var v=inn[k%72];if(v){if(!run)rs=k;run++;if(run>best&&run<=72){best=run;bs=rs}}else run=0}
 var arc=best>=71?360:Math.min(360,best*5+5),a0=best>=71?0:(bs*5-5);[90,180,270,360].forEach(function(k){if(Math.abs(arc-k)<=20)arc=k});if(arc<30)arc=30;if(arc===360)a0=0;return [a0,arc]}
 function aRender(frz){var L=ALAST;if(!L||!L.e0)return;var e0=L.e0,s=L.prod,sx=L.s,members=L.mem,poly=L.poly,P=g('apr'),Qa=g('aq'),rect=!!(e0.H.length&&e0.H[0].rect);
-var key=JSON.stringify([poly,ASEL,ANZ,P,$('asd').value]);if(AED.k!==key)AED={k:key,mv:{},add:[],del:{},sel:null,mode:false};
+var key=JSON.stringify([poly,ASEL,ANZ,P,$('asd').value,$('aes').value]);if(AED.k!==key)AED={k:key,mv:{},add:[],del:{},sel:null,mode:false};
 var nmv=0,ndl=0,H=e0.H.map(function(hd,i){if(AED.del[i]&&!rect){ndl++;return null}var c=JSON.parse(JSON.stringify(hd));c.i=i;var m=AED.mv[i];if(m&&!rect){c.x=m[0];c.y=m[1];var a=aArcAt(c.x,c.y,e0.R,poly);c.a0=a[0];c.A=a[1];nmv++}if(AED.sel==='m'+i)c.sel=1;return c}).filter(Boolean);
 if(!rect)AED.add.forEach(function(p,j){var a=aArcAt(p[0],p[1],e0.R,poly);H.push({x:p[0],y:p[1],a0:a[0],A:a[1],man:1,j:j,i:H.length,sel:AED.sel==='a'+j?1:0})});
 var qt=0;H.forEach(function(hd){hd.q=rect?e0.z.q:(sx.arcos?aQ(sx,e0.b,P,hd.A):e0.z.q);qt+=hd.q});
 var pr=H.reduce(function(a,hd){return a+hd.q*(rect?1:hd.A/360)},0)*1000/e0.A;
-var e={b:e0.b,R:e0.R,z:e0.z,H:H,qt:qt,h:H.length,pr:pr,zn:H.length?(Qa>0?Math.ceil(qt/Qa-1e-9):1):0,hi2:pr>s.pmax?1:0,A:e0.A};L.e=e;
+var e={b:e0.b,R:e0.R,z:e0.z,H:H,qt:qt,h:H.length,pr:pr,zn:H.length?(Qa>0?Math.ceil(qt/Qa-1e-9):1):0,hi2:pr>s.pmax?1:0,A:e0.A,cu:(AED.add.length||nmv||ndl)?null:e0.cu};L.e=e;
 var canDel=!!AED.sel;
 var tb=rect?'':'<div class="aed"><button type="button" class="btn2'+(AED.mode?' on':'')+'" id="aedadd">'+(AED.mode?'✔ A adicionar (toque no desenho)':'➕ Adicionar pontos')+'</button> <button type="button" class="btn2" id="aeddel"'+(canDel?'':' disabled')+'>🗑 Eliminar ponto</button> <button type="button" class="btn2" id="aedall"'+(H.length?'':' disabled')+'>🗑 Eliminar todos</button> <button type="button" class="btn2" id="aedrst"'+(AED.add.length||nmv||ndl?'':' disabled')+'>↺ Repor automático</button></div><p class="hint">Arraste um ponto para o mover. Com “Adicionar” ativo, toque no desenho as vezes que precisar. Toque num ponto para o selecionar e eliminar (sugerido ou acrescentado), ou elimine todos e coloque só os que quiser.</p>';
 var arcs={};e.H.forEach(function(x){var k=x.rect?'faixa':Math.round(x.A)+'º';arcs[k]=(arcs[k]||0)+1});
 var resumo=Object.keys(arcs).map(function(k){return arcs[k]+' × '+k}).join(' · ')+(AED.add.length?' · '+AED.add.length+' acrescentado'+(AED.add.length>1?'s':'')+' à mão':'')+(nmv?' · '+nmv+' movido'+(nmv>1?'s':''):'')+(ndl?' · '+ndl+' eliminado'+(ndl>1?'s':''):'');resumo=resumo.replace(/^ · /,'');
-$('adw').innerHTML=tb+aSvg(poly,e,sx,{id:'asr',edit:!rect,ext:frz})+'<div class="box" style="margin-top:10px"><b>'+e.h+' '+(s.tipo==='aspersor'?'aspersores':'unidades')+'</b> · '+resumo+'<br>Raio '+f(e.R,1)+' m '+(e.H[0]&&e.H[0].rect?'':' · diâmetro <b>'+f(2*e.R,1)+' m</b> por unidade')+' · caudal total <b>'+f(e.qt,2)+' m³/h</b> · <b>'+e.zn+' '+(e.zn>1?'setores':'setor')+'</b>'+(e.zn>1?' de cerca de '+Math.ceil(e.h/e.zn)+' unidades':'')+' · precipitação média '+f(e.pr,0)+' mm/h'+(e.H[0]&&e.H[0].rect?'':'<br><span class="hint"><span style="color:#e07a10">■</span> laranja: água que cai fora da área escolhida · tracejado: círculo completo (diâmetro) de cada unidade</span>')+'<br><span class="hint">'+(members?sx.nome+' · ':'')+'Cód. fornecedor: '+aCods(sx,1).slice(0,6).join(', ')+'</span>'+(e.z.w<0?'<br><span class="hint" style="color:var(--warn)">Pressão abaixo do mínimo da tabela ('+f(e.z.lo,1)+' bar): valores do mínimo.</span>':'')+(e.z.w>0?'<br><span class="hint" style="color:var(--warn)">Pressão acima do máximo da tabela ('+f(e.z.hi,1)+' bar): valores do máximo.</span>':'')+(e.hi2?'<br><span class="hint" style="color:var(--warn)">Precipitação alta: risco de escorrência.</span>':'')+'</div><button class="btn2" type="button" id="apri" style="margin-top:8px">'+(ACH?'Imprimir a escolha guardada':'Imprimir desenho')+'</button>'}
+$('adw').innerHTML=tb+aSvg(poly,e,sx,{id:'asr',edit:!rect,ext:frz})+'<div class="box" style="margin-top:10px"><b>'+e.h+' '+(s.tipo==='aspersor'?'aspersores':'unidades')+'</b> · '+resumo+'<br>Raio '+f(e.R,1)+' m '+(e.H[0]&&e.H[0].rect?'':' · diâmetro <b>'+f(2*e.R,1)+' m</b> por unidade')+' · caudal total <b>'+f(e.qt,2)+' m³/h</b> · <b>'+e.zn+' '+(e.zn>1?'setores':'setor')+'</b>'+(e.zn>1?' de cerca de '+Math.ceil(e.h/e.zn)+' unidades':'')+' · precipitação média '+f(e.pr,0)+' mm/h'+(e.cu!=null?' · uniformidade estimada <b>'+f(e.cu,0)+' %</b>':'')+(e.H[0]&&e.H[0].rect?'':'<br><span class="hint"><span style="color:#e07a10">■</span> laranja: água que cai fora da área escolhida · tracejado: círculo completo (diâmetro) de cada unidade</span>')+'<br><span class="hint">'+(members?sx.nome+' · ':'')+'Cód. fornecedor: '+aCods(sx,1).slice(0,6).join(', ')+'</span>'+(e.z.w<0?'<br><span class="hint" style="color:var(--warn)">Pressão abaixo do mínimo da tabela ('+f(e.z.lo,1)+' bar): valores do mínimo.</span>':'')+(e.z.w>0?'<br><span class="hint" style="color:var(--warn)">Pressão acima do máximo da tabela ('+f(e.z.hi,1)+' bar): valores do máximo.</span>':'')+(e.hi2?'<br><span class="hint" style="color:var(--warn)">Precipitação alta: risco de escorrência.</span>':'')+'</div><button class="btn2" type="button" id="apri" style="margin-top:8px">'+(ACH?'Imprimir a escolha guardada':'Imprimir desenho')+'</button>';if(window.mapDraw)mapDraw()}
 
 function aPt(e){var sv=$('asr');if(!sv||!sv.dataset.e)return null;var pt=sv.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;var q=pt.matrixTransform(sv.getScreenCTM().inverse()),d=sv.dataset.e.split(',').map(Number);return [Math.round((q.x-d[2]+d[0])*10)/10,Math.round((d[1]+d[2]-q.y)*10)/10]}
 document.addEventListener('pointerdown',function(e){var t=e.target.closest&&e.target.closest('.aed-h');if(!t||!ALAST)return;e.preventDefault();var sv=t.ownerSVGElement;ADR={k:t.dataset.k,sx:e.clientX,sy:e.clientY,moved:0,ext:sv.dataset.x.split(',').map(Number)}});
@@ -787,6 +823,87 @@ if(AED.mode&&t.closest('#asr')&&!t.closest('.aed-h')&&Date.now()-ADT>400){var p=
 function aDelSel(){if(!AED.sel)return;var n=+AED.sel.slice(1);if(AED.sel.charAt(0)==='a')AED.add.splice(n,1);else{AED.del[n]=1;delete AED.mv[n]}AED.sel=null;aRender()}
 document.addEventListener('keydown',function(e){if((e.key==='Delete'||e.key==='Backspace')&&AED.sel&&!/INPUT|SELECT|TEXTAREA/.test((e.target.tagName||''))){e.preventDefault();aDelSel()}});
 
+/* ===== Mapa (satélite gratuito ou Google Maps) ===== */
+var MP={prov:'free',lay:'sat',c:[39.6,-8.0],z:7,pts:[],closed:false,draw:false,vis:false,v:null,gm:null,key:'',O:null,tl:{}};
+try{var MS=JSON.parse(localStorage.getItem('ir_map')||'null');if(MS){MP.prov=MS.prov==='google'?'google':'free';MP.lay=MS.lay==='map'?'map':'sat';if(MS.c&&MS.c.length===2)MP.c=MS.c;if(MS.z)MP.z=MS.z;if(MS.pts&&MS.pts.length)MP.pts=MS.pts;MP.closed=!!MS.closed&&MP.pts.length>=3;MP.key=MS.key||''}}catch(x){}
+function mSave(){try{localStorage.setItem('ir_map',JSON.stringify({prov:MP.prov,lay:MP.lay,c:MP.c,z:MP.z,pts:MP.pts,closed:MP.closed,key:MP.key}))}catch(x){}}
+function mW(lat,lng,z){var s=256*Math.pow(2,z),r=lat*Math.PI/180;return [(lng+180)/360*s,(1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*s]}
+function mL(x,y,z){var s=256*Math.pow(2,z),n=Math.PI*(1-2*y/s);return [180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))),x/s*360-180]}
+var MLAT=111319.49;
+function mOrg(pts){var la=Math.min.apply(0,pts.map(function(p){return p[0]})),lo=Math.min.apply(0,pts.map(function(p){return p[1]}));return [la,lo]}
+function mXY(lat,lng,O){return [(lng-O[1])*MLAT*Math.cos(O[0]*Math.PI/180),(lat-O[0])*MLAT]}
+function mLL(x,y,O){return [O[0]+y/MLAT,O[1]+x/(MLAT*Math.cos(O[0]*Math.PI/180))]}
+function mMsg(t){var m=$('mmsg');if(m)m.textContent=t||''}
+function mUrl(x,y,z){return MP.lay==='sat'?'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/'+z+'/'+y+'/'+x:'https://tile.openstreetmap.org/'+z+'/'+x+'/'+y+'.png'}
+function mSync(){var P=MP.pts;if(MP.closed&&P.length>=3){MP.O=mOrg(P);AFREE=P.map(function(p){var q=mXY(p[0],p[1],MP.O);return [Math.round(q[0]*100)/100,Math.round(q[1]*100)/100]});var mx=0,my=0;AFREE.forEach(function(q){mx=Math.max(mx,q[0]);my=Math.max(my,q[1])});if($('ash').value!=='free'){$('ash').value='free';aShape()}$('ap1').value=Math.ceil(mx);$('ap2').value=Math.ceil(my)}else{MP.O=P.length?mOrg(P):null;if($('ash').value==='free')AFREE=[]}
+mSave();asp();mapDraw()}
+function mSame(){if(!MP.closed||!MP.O||!ALAST||!ALAST.e||!ALAST.e0||!ALAST.poly)return false;var p=aPoly();return !!p&&JSON.stringify(p)===JSON.stringify(ALAST.poly)}
+function mapDraw(){var o=$('mpo');if(!MP.vis||!MP.v||!o)return;var V=MP.v,pl=MP.pts.map(function(p){return V.px(p[0],p[1])}),s='',ok=mSame(),O=MP.pts.length?mOrg(MP.pts):null;
+var m2=function(x,y){var q=mLL(x,y,MP.O);return V.px(q[0],q[1])};
+if(ok){var e=ALAST.e,R=e.R;e.H.forEach(function(h){if(h.rect)return;var d='',n=h.A>=359?36:Math.max(2,Math.ceil(h.A/6));if(h.A>=359){for(var i=0;i<n;i++){var a=i*2*Math.PI/n,q=m2(h.x+R*Math.cos(a),h.y+R*Math.sin(a));d+=(i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)}d+='Z'}else{var c=m2(h.x,h.y);d='M'+c[0].toFixed(1)+' '+c[1].toFixed(1);for(var i=0;i<=n;i++){var a=(h.a0+h.A*i/n)*Math.PI/180,q=m2(h.x+R*Math.cos(a),h.y+R*Math.sin(a));d+='L'+q[0].toFixed(1)+' '+q[1].toFixed(1)}d+='Z'}
+s+='<path d="'+d+'" fill="rgba(54,169,214,.30)" stroke="rgba(255,255,255,.8)" stroke-width="1"/>'})}
+if(pl.length>1){s+='<path d="'+pl.map(function(p,i){return (i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)}).join('')+(MP.closed?'Z':'')+'" fill="'+(MP.closed?'rgba(255,212,0,.07)':'none')+'" stroke="#ffd400" stroke-width="2.5"/>';
+var nE=MP.closed?pl.length:pl.length-1;for(var i=0;i<nE;i++){var a=MP.pts[i],b=MP.pts[(i+1)%pl.length],A=mXY(a[0],a[1],O),B=mXY(b[0],b[1],O),l=Math.hypot(B[0]-A[0],B[1]-A[1]),mx=(pl[i][0]+pl[(i+1)%pl.length][0])/2,my=(pl[i][1]+pl[(i+1)%pl.length][1])/2;if(Math.hypot(pl[(i+1)%pl.length][0]-pl[i][0],pl[(i+1)%pl.length][1]-pl[i][1])>70)s+='<text x="'+mx.toFixed(1)+'" y="'+(my-6).toFixed(1)+'" font-size="12" font-family="sans-serif" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke" text-anchor="middle">'+f(l,1)+' m</text>'}}
+pl.forEach(function(p,i){s+='<circle class="mvx" data-v="'+i+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(MP.draw&&i===0&&pl.length>=3?10:6)+'" fill="#fff" stroke="#ffd400" stroke-width="2.5" style="pointer-events:all;cursor:pointer"/>'});
+if(ok){ALAST.e.H.forEach(function(h,i){if(h.rect)return;var q=m2(h.x,h.y),k=h.man?'a'+h.j:'m'+h.i,sel=h.sel;s+='<circle class="mh" data-k="'+k+'" cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="'+(sel?9:7)+'" fill="'+(h.man?'#1677c8':'#2fa84f')+'" stroke="'+(sel?'#ff8a1f':'#fff')+'" stroke-width="'+(sel?3:2)+'" style="pointer-events:all;cursor:pointer"/>'})}
+o.innerHTML=s;
+var un=function(id,dis,on){var b=$(id);if(!b)return;b.disabled=!!dis;b.classList.toggle('on',!!on)};
+$('mdraw').textContent=MP.draw?'✔ A desenhar (toque nos cantos)':'✏ Desenhar terreno';un('mdraw',0,MP.draw);un('mfin',!(MP.draw&&MP.pts.length>=3),0);un('mundo',!MP.pts.length,0);un('mclr',!MP.pts.length,0);
+[['madd','aedadd'],['mdel','aeddel'],['mall','aedall'],['mrst','aedrst']].forEach(function(r){var t=$(r[1]),b=$(r[0]);if(!b)return;b.disabled=!ok||(t?t.disabled:true);b.classList.toggle('on',!!(t&&t.classList.contains('on')));if(r[0]==='madd')b.textContent=t?t.textContent:'➕ Adicionar pontos'});
+var ar=MP.closed&&MP.O?Math.abs(pArea(AFREE.length>=3?AFREE:[[0,0]])):0,bx=document.querySelector('#adw .box');
+$('msum').innerHTML=(ar?'<b>Área do terreno: '+f(ar,0)+' m²</b> · perímetro '+f(pPer(AFREE),0)+' m<br>':'')+(ok&&bx?bx.innerHTML:'<span class="hint">'+(MP.closed?'Escolha um modelo de aspersor na lista para ver a distribuição no mapa.':'Carregue em “Desenhar terreno” e toque nos cantos do terreno sobre a imagem; termine tocando no primeiro ponto ou em “Terminar”.')+'</span>')}
+function mFree(box){box.innerHTML='<div id="mpt" style="position:absolute;left:0;top:0;width:100%;height:100%"></div><svg id="mpo" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:hidden"></svg><div class="mctl"><button type="button" id="mzi" aria-label="Aproximar">+</button><button type="button" id="mzo" aria-label="Afastar">−</button></div><div class="matt">'+(MP.lay==='sat'?'Imagens © Esri, Maxar, Earthstar Geographics':'© OpenStreetMap')+'</div>';
+var T=$('mpt'),tl={},pt={},pin=0,P1=null,lw=0;
+var V={type:'free',size:function(){return [box.clientWidth,box.clientHeight]},
+px:function(lat,lng){var w=mW(lat,lng,MP.z),c=mW(MP.c[0],MP.c[1],MP.z),s=V.size();return [s[0]/2+w[0]-c[0],s[1]/2+w[1]-c[1]]},
+ll:function(x,y){var c=mW(MP.c[0],MP.c[1],MP.z),s=V.size();return mL(c[0]+x-s[0]/2,c[1]+y-s[1]/2,MP.z)},
+go:function(c,z){MP.c=c;if(z!=null)MP.z=Math.max(2,Math.min(19,Math.round(z)));V.tiles();mapDraw();mSave()},
+tiles:function(){var s=V.size(),z=MP.z,c=mW(MP.c[0],MP.c[1],z),n=Math.pow(2,z),x0=Math.floor((c[0]-s[0]/2)/256),x1=Math.floor((c[0]+s[0]/2)/256),y0=Math.max(0,Math.floor((c[1]-s[1]/2)/256)),y1=Math.min(n-1,Math.floor((c[1]+s[1]/2)/256)),keep={};
+for(var tx=x0;tx<=x1;tx++)for(var ty=y0;ty<=y1;ty++){var tw=((tx%n)+n)%n,k=MP.lay+z+'/'+tw+'/'+ty+'@'+tx;keep[k]=1;var im=tl[k];if(!im){im=new Image();im.alt='';im.draggable=false;im.style.cssText='position:absolute;width:256px;height:256px;max-width:none;pointer-events:none;user-select:none';im.onerror=function(){this.style.visibility='hidden'};im.src=mUrl(tw,ty,z);T.appendChild(im);tl[k]=im}
+im.style.left=Math.round(s[0]/2+tx*256-c[0])+'px';im.style.top=Math.round(s[1]/2+ty*256-c[1])+'px'}
+Object.keys(tl).forEach(function(k){if(!keep[k]){T.removeChild(tl[k]);delete tl[k]}})}};
+function zoomAt(dz,x,y){var s=V.size(),nz=Math.max(2,Math.min(19,MP.z+dz));if(nz===MP.z)return;var p=V.ll(x,y);MP.z=nz;var w=mW(p[0],p[1],nz);MP.c=mL(w[0]-(x-s[0]/2),w[1]-(y-s[1]/2),nz);V.tiles();mapDraw();mSave()}
+$('mzi').onclick=function(){var s=V.size();zoomAt(1,s[0]/2,s[1]/2)};$('mzo').onclick=function(){var s=V.size();zoomAt(-1,s[0]/2,s[1]/2)};
+box.addEventListener('wheel',function(e){e.preventDefault();if(Date.now()-lw<200)return;lw=Date.now();var r=box.getBoundingClientRect();zoomAt(e.deltaY<0?1:-1,e.clientX-r.left,e.clientY-r.top)},{passive:false});
+box.addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('.mh,.mvx,.mctl'))return;pt[e.pointerId]={x:e.clientX,y:e.clientY};var ks=Object.keys(pt);if(ks.length===1){P1={x:e.clientX,y:e.clientY,c:MP.c.slice(),moved:0}}else if(ks.length===2){pin=0;if(P1)P1.moved=99}});
+box.addEventListener('pointermove',function(e){if(!pt[e.pointerId])return;pt[e.pointerId]={x:e.clientX,y:e.clientY};var ks=Object.keys(pt);
+if(ks.length===2){var a=pt[ks[0]],b=pt[ks[1]],d=Math.hypot(a.x-b.x,a.y-b.y);if(!pin)pin=d;var r=box.getBoundingClientRect(),cx=(a.x+b.x)/2-r.left,cy=(a.y+b.y)/2-r.top;if(d/pin>1.5){zoomAt(1,cx,cy);pin=d}else if(d/pin<0.66){zoomAt(-1,cx,cy);pin=d}return}
+if(!P1)return;var dx=e.clientX-P1.x,dy=e.clientY-P1.y;if(!P1.moved&&Math.hypot(dx,dy)<6)return;if(P1.moved!==99)P1.moved=1;if(P1.moved!==1)return;var w=mW(P1.c[0],P1.c[1],MP.z);MP.c=mL(w[0]-dx,w[1]-dy,MP.z);V.tiles();mapDraw()});
+var up=function(e){if(!pt[e.pointerId])return;delete pt[e.pointerId];if(Object.keys(pt).length===0&&P1){var m=P1.moved;P1=null;pin=0;if(!m&&e.type==='pointerup'){var r=box.getBoundingClientRect(),q=V.ll(e.clientX-r.left,e.clientY-r.top);mapClick(q[0],q[1])}else mSave()}};
+box.addEventListener('pointerup',up);box.addEventListener('pointercancel',up);
+MP.v=V;V.tiles();mapDraw()}
+function mGLoad(cb){if(window.google&&google.maps&&google.maps.Map){cb();return}if(!MP.key){mMsg('Cole a chave da API do Google Maps para usar este mapa.');return}window.__gmcb=function(){cb()};window.gm_authFailure=function(){mMsg('A Google recusou a chave (confirme a chave, a faturação e as restrições de domínio).')};var sc=document.createElement('script');sc.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(MP.key)+'&callback=__gmcb&v=weekly';sc.async=true;sc.onerror=function(){mMsg('Não foi possível carregar o Google Maps (sem ligação ou bloqueado).')};document.head.appendChild(sc)}
+function mGoogle(box){box.innerHTML='<div id="mgm" style="position:absolute;left:0;top:0;width:100%;height:100%"></div><svg id="mpo" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2"></svg>';mMsg('A carregar o Google Maps…');
+mGLoad(function(){var gm=new google.maps.Map($('mgm'),{center:{lat:MP.c[0],lng:MP.c[1]},zoom:MP.z,mapTypeId:MP.lay==='sat'?'satellite':'roadmap',tilt:0,gestureHandling:'greedy',fullscreenControl:false,streetViewControl:false,mapTypeControl:false,clickableIcons:false});MP.gm=gm;
+var ov=new google.maps.OverlayView();ov.onAdd=function(){};ov.onRemove=function(){};ov.draw=function(){mapDraw()};ov.setMap(gm);
+MP.v={type:'google',size:function(){return [box.clientWidth,box.clientHeight]},px:function(lat,lng){var p=ov.getProjection();if(!p)return [0,0];var q=p.fromLatLngToContainerPixel(new google.maps.LatLng(lat,lng));return [q.x,q.y]},ll:function(x,y){var p=ov.getProjection(),q=p.fromContainerPixelToLatLng(new google.maps.Point(x,y));return [q.lat(),q.lng()]},go:function(c,z){gm.setCenter({lat:c[0],lng:c[1]});if(z!=null)gm.setZoom(z)}};
+gm.addListener('click',function(ev){mapClick(ev.latLng.lat(),ev.latLng.lng())});gm.addListener('idle',function(){var c=gm.getCenter();MP.c=[c.lat(),c.lng()];MP.z=gm.getZoom();mSave();mapDraw()});gm.addListener('bounds_changed',function(){mapDraw()});mMsg('');mapDraw()})}
+function mInit(){var box=$('mpv');if(!box)return;MP.v=null;MP.gm=null;box.innerHTML='';$('mkeyb').hidden=MP.prov!=='google';$('mprov').value=MP.prov;$('mlay').value=MP.lay;box.style.cursor=MP.draw?'crosshair':'grab';mMsg('');if(MP.prov==='google')mGoogle(box);else mFree(box);mapDraw()}
+function mGo(c,z){if(MP.v)MP.v.go(c,z);else{MP.c=c;if(z)MP.z=z}}
+function mapClick(lat,lng){if(MP.draw){MP.pts.push([lat,lng]);MP.closed=false;mSave();mapDraw();return}
+if(AED.mode){if(!mSame()){mMsg('Primeiro termine o terreno e escolha um modelo de aspersor.');return}var q=mXY(lat,lng,MP.O);AED.add.push([Math.round(q[0]*10)/10,Math.round(q[1]*10)/10]);AED.sel='a'+(AED.add.length-1);aRender()}}
+function mFin(){if(MP.pts.length<3)return;mMsg('');MP.draw=false;MP.closed=true;$('mpv').style.cursor='grab';mSync()}
+$('mdraw').addEventListener('click',function(){if(MP.draw){mFin();return}MP.pts=[];MP.closed=false;MP.draw=true;AED.mode=false;$('mpv').style.cursor='crosshair';mSync();mMsg('Toque nos cantos do terreno, por ordem. Termine tocando no primeiro ponto.')});
+$('mfin').addEventListener('click',mFin);
+$('mundo').addEventListener('click',function(){if(!MP.pts.length)return;MP.pts.pop();MP.closed=false;MP.draw=MP.pts.length>0||MP.draw;$('mpv').style.cursor=MP.draw?'crosshair':'grab';mSync()});
+$('mclr').addEventListener('click',function(){MP.pts=[];MP.closed=false;MP.draw=false;$('mpv').style.cursor='grab';mSync()});
+[['madd','aedadd'],['mdel','aeddel'],['mall','aedall'],['mrst','aedrst']].forEach(function(r){$(r[0]).addEventListener('click',function(){var t=$(r[1]);if(t&&!t.disabled)t.click()})});
+$('mprov').addEventListener('change',function(){MP.prov=$('mprov').value;mSave();mInit()});
+$('mlay').addEventListener('change',function(){MP.lay=$('mlay').value;mSave();if(MP.prov==='google'&&MP.gm)MP.gm.setMapTypeId(MP.lay==='sat'?'satellite':'roadmap');else mInit()});
+$('mkey').value=MP.key;$('mkeyok').addEventListener('click',function(){MP.key=$('mkey').value.trim();mSave();mInit()});
+function mSearch(){var q=$('mq').value.trim();if(!q)return;var m=q.match(/^\s*(-?\d+(?:[.,]\d+)?)\s*[,;\s]\s*(-?\d+(?:[.,]\d+)?)\s*$/);if(m){mGo([parseFloat(m[1].replace(',','.')),parseFloat(m[2].replace(',','.'))],19);return}
+mMsg('A procurar…');if(MP.prov==='google'&&window.google&&google.maps&&google.maps.Geocoder){new google.maps.Geocoder().geocode({address:q},function(r,st){if(st==='OK'&&r[0]){var l=r[0].geometry.location;mGo([l.lat(),l.lng()],18);mMsg('')}else mMsg('Local não encontrado.')});return}
+fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q)).then(function(r){return r.json()}).then(function(a){if(a&&a[0]){mGo([+a[0].lat,+a[0].lon],18);mMsg('')}else mMsg('Local não encontrado.')}).catch(function(){mMsg('Sem ligação para procurar. Pode escrever coordenadas, por exemplo 38.5, -8.2.')})}
+$('mgo').addEventListener('click',mSearch);$('mq').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();mSearch()}});
+$('mloc').addEventListener('click',function(){if(!navigator.geolocation){mMsg('Este dispositivo não indica a localização.');return}navigator.geolocation.getCurrentPosition(function(p){mGo([p.coords.latitude,p.coords.longitude],19);mMsg('')},function(){mMsg('Não foi possível obter a localização (permita o acesso no navegador).')},{enableHighAccuracy:true,timeout:10000})});
+var MDR=null;
+document.addEventListener('pointerdown',function(e){var t=e.target.closest&&e.target.closest('.mh,.mvx');if(!t||!MP.vis)return;e.preventDefault();e.stopPropagation();MDR={k:t.dataset.k,v:t.dataset.v,x:e.clientX,y:e.clientY,moved:0}},true);
+document.addEventListener('pointermove',function(e){if(!MDR)return;if(!MDR.moved&&Math.hypot(e.clientX-MDR.x,e.clientY-MDR.y)<6)return;MDR.moved=1;var r=$('mpv').getBoundingClientRect(),q=MP.v.ll(e.clientX-r.left,e.clientY-r.top);
+if(MDR.v!=null){MP.pts[+MDR.v]=q;mapDraw()}else if(mSame()){var p=mXY(q[0],q[1],MP.O);p=[Math.round(p[0]*10)/10,Math.round(p[1]*10)/10];var kk=MDR.k;if(kk.charAt(0)==='m')AED.mv[+kk.slice(1)]=p;else AED.add[+kk.slice(1)]=p;AED.sel=kk;aRender()}});
+document.addEventListener('pointerup',function(){if(!MDR)return;var d=MDR;MDR=null;if(d.v!=null){if(d.moved){if(MP.closed)mSync();else{mSave();mapDraw()}}else if(MP.draw&&+d.v===0&&MP.pts.length>=3)mFin()}else if(!d.moved){AED.sel=d.k;aRender()}},true);
+function mShow(on){MP.vis=on;$('adw').hidden=on;$('adh').hidden=on;$('amap').hidden=!on;$('avd').classList.toggle('on',!on);$('avm').classList.toggle('on',on);if(on){if(MP.closed)mSync();mInit()}}
+$('avd').addEventListener('click',function(){mShow(false)});$('avm').addEventListener('click',function(){mShow(true)});
+window.addEventListener('resize',function(){if(MP.vis&&MP.v&&MP.v.tiles){MP.v.tiles();mapDraw()}});
 function aOpenS(s,P){var h='<h2>'+s.marca+' '+s.nome+'</h2><div class="hint">'+s.info+'</div><h3>Códigos do fornecedor</h3>'+(s.cod.length?s.cod.map(function(c){return '<div>'+c[0]+' · '+c[1]+'</div>'}).join(''):'<div class="hint">Sem código listado.</div>');
 (s.mem||[s]).forEach(function(s1){if(s.mem)h+='<h3 style="color:var(--ink)">'+s1.nome+'</h3>';s1.bicos.forEach(function(b){var s=s1;h+='<h3>'+(s.faixa?'Tabela':s.arcos?'Círculo completo (360º)':'Bico '+b.n)+'</h3><table class="tb"><tr><th>bar</th><th>'+(s.faixa?'Comprimento':'Raio')+' (m)</th><th>m³/h</th><th>L/min</th></tr>'+b.r.map(function(r){return '<tr><td>'+f(r[0],1)+'</td><td>'+f(r[1],1)+'</td><td>'+f(r[2],2)+'</td><td>'+f(r[3],1)+'</td></tr>'}).join('')+'</table>'})});
 if(!s.bicos.length&&!s.mem)h+='<p class="hint">O catálogo não inclui tabela de desempenho para este artigo.</p>';h+=(s.fora?'<p class="hint">Artigo fora do catálogo: sem tabela de desempenho nem códigos do fornecedor.</p>':'<p class="hint">Catálogo Cudell 2026, pág. '+(s.pg||'–')+'.</p>');$('amc').innerHTML=h;$('amd').hidden=false}
