@@ -64,6 +64,9 @@ td input{width:90px;padding:6px 8px;border:1px solid var(--line);border-radius:8
 @media(max-width:980px){.wrap{grid-template-columns:minmax(0,1fr);padding:12px}aside{position:static;display:flex;overflow-x:auto;gap:6px;padding:8px;border-radius:14px}aside h3{display:none}
 .mod{width:auto;flex:0 0 auto;padding:7px 10px}.mod small{display:none}.split{grid-template-columns:minmax(0,1fr)}.kpis,.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.g2,.g3{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.prow{grid-template-columns:100px 1fr 40px}h1{font-size:1.3rem}.brand img{height:38px}}
+td select{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.split2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}.split2>div{min-width:0}
+@media(max-width:980px){.split2{grid-template-columns:minmax(0,1fr)}}
 @media print{header,aside,.noprint,.dtool{display:none!important}.wrap{display:block}body{background:#fff}.card{box-shadow:none;break-inside:avoid}}
 </style></head><body>
 <header><div class="hd">
@@ -76,18 +79,661 @@ td input{width:90px;padding:6px 8px;border:1px solid var(--line);border-radius:8
 <aside id="side"></aside>
 <main id="main"></main>
 </div>
-<div class="foot">Imper Regas Lda · Pivot Engineering v1.0 · Os resultados são indicativos e devem ser validados por um técnico antes da instalação.</div>
+<div class="foot">Imper Regas Lda · Pivot Engineering v1.2 · Os resultados são indicativos e devem ser validados por um técnico antes da instalação.</div>
 <script>
 (function(){
 'use strict';
+var E = (() => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+  // entry.ts
+  var entry_exports = {};
+  __export(entry_exports, {
+    AWC_TIPICO: () => AWC_TIPICO,
+    BAR_M: () => BAR_M,
+    CULTURAS: () => CULTURAS,
+    MATERIAIS: () => MATERIAIS,
+    MOTORES_KW: () => MOTORES_KW,
+    TIPOS: () => TIPOS,
+    TIPOS_EMISSOR: () => TIPOS_EMISSOR,
+    agroPadrao: () => agroPadrao,
+    alertasGeo: () => alertasGeo,
+    alertasParcela: () => alertasParcela,
+    alturaSistema: () => alturaSistema,
+    bombPadrao: () => bombPadrao,
+    calcAgro: () => calcAgro,
+    calcEmit: () => calcEmit,
+    calcGeo: () => calcGeo,
+    calcHid: () => calcHid,
+    calcHmt: () => calcHmt,
+    calcParcela: () => calcParcela,
+    calcPotencias: () => calcPotencias,
+    caudalSistema: () => caudalSistema,
+    christiansen: () => christiansen,
+    comparar: () => comparar,
+    curvaKc: () => curvaKc,
+    diametroInterno: () => diametroInterno,
+    emitPadrao: () => emitPadrao,
+    estadoVelocidade: () => estadoVelocidade,
+    fatorAtrito: () => fatorAtrito,
+    fmt: () => fmt,
+    hidPadrao: () => hidPadrao,
+    hoje: () => hoje,
+    interp: () => interp,
+    kcFase: () => kcFase,
+    modeloVazio: () => modeloVazio,
+    motivoSemPonto: () => motivoSemPonto,
+    normalizar: () => normalizar,
+    novoProjeto: () => novoProjeto,
+    num: () => num,
+    perdasTroco: () => perdasTroco,
+    pontoFuncionamento: () => pontoFuncionamento,
+    pontosValidos: () => pontosValidos,
+    progresso: () => progresso,
+    proximoMotor: () => proximoMotor,
+    trocoNovo: () => trocoNovo,
+    uid: () => uid
+  });
+
+  // geometry.ts
+  function num(v) {
+    const n = parseFloat(String(v != null ? v : "").replace(",", "."));
+    return Number.isFinite(n) ? n : null;
+  }
+  function fmt(v, d = 0) {
+    if (v === null || v === void 0 || !Number.isFinite(v)) return "\u2014";
+    return v.toLocaleString("pt-PT", { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  var area = (r) => Math.PI * r * r / 1e4;
+  function calcGeo(g2) {
+    var _a, _b, _c;
+    const sp = g2.spans.map((x) => {
+      var _a2;
+      return Math.max(0, (_a2 = num(x)) != null ? _a2 : 0);
+    });
+    const lb = Math.max(0, (_a = num(g2.lb)) != null ? _a : 0);
+    const G = g2.gun ? Math.max(0, (_b = num(g2.G)) != null ? _b : 0) : 0;
+    const th = Math.min(360, Math.max(0, (_c = num(g2.theta)) != null ? _c : 0));
+    const sum = sp.reduce((a, b) => a + b, 0);
+    const L = sum + lb;
+    const R = L + G;
+    const k = th / 360;
+    const towers = [];
+    const secs = [];
+    let acc = 0;
+    sp.forEach((s, i) => {
+      const r0 = acc;
+      acc += s;
+      towers.push({ n: i + 1, at: acc, len: s });
+      secs.push({ n: `V\xE3o ${i + 1}`, r0, r1: acc, len: s, area: (area(acc) - area(r0)) * k });
+    });
+    if (lb > 0) {
+      secs.push({ n: "Balan\xE7o", r0: acc, r1: acc + lb, len: lb, area: (area(acc + lb) - area(acc)) * k });
+      acc += lb;
+    }
+    if (G > 0) secs.push({ n: "Canh\xE3o", r0: acc, r1: acc + G, len: G, area: (area(acc + G) - area(acc)) * k });
+    return {
+      n: sp.length,
+      sp,
+      sum,
+      lb,
+      G,
+      th,
+      L,
+      R,
+      D: 2 * R,
+      P: 2 * Math.PI * R,
+      Afull: area(R),
+      As: area(R) * k,
+      ApL: area(L) * k,
+      towers,
+      secs,
+      avgT: sp.length ? sum / sp.length : 0
+    };
+  }
+  function calcParcela(par, g2, c) {
+    var _a, _b, _c;
+    const len = num(par.len), wid = num(par.wid);
+    if (!len || !wid || !c.R || !c.th) return null;
+    const ox = (_a = num(g2.ox)) != null ? _a : 0, oy = (_b = num(g2.oy)) != null ? _b : 0, st = (_c = num(g2.start)) != null ? _c : 0;
+    const hx = len / 2, hy = wid / 2;
+    const NR = 160, NT = Math.max(90, Math.round(c.th));
+    const dr = c.R / NR, dt = c.th / NT;
+    let inside = 0;
+    for (let i = 0; i < NR; i++) {
+      const r = (i + 0.5) * dr;
+      for (let j = 0; j < NT; j++) {
+        const a = (st + (j + 0.5) * dt) * Math.PI / 180;
+        const x = ox + r * Math.sin(a), y = oy + r * Math.cos(a);
+        if (Math.abs(x) <= hx && Math.abs(y) <= hy) inside += r * dr * dt * (Math.PI / 180);
+      }
+    }
+    const ar = len * wid / 1e4;
+    const ins = inside / 1e4;
+    return { area: ar, inside: ins, outside: c.As - ins, uncov: ar - ins, pct: ar ? ins / ar * 100 : 0 };
+  }
+  function alertasGeo(g2, par, c, pc) {
+    const al = [];
+    c.sp.forEach((s, i) => {
+      if (s <= 0) al.push({ nivel: "b", texto: `V\xE3o ${i + 1} sem comprimento v\xE1lido.` });
+    });
+    const pos = c.sp.filter((s) => s > 0);
+    const mx = Math.max(0, ...c.sp), mn = pos.length ? Math.min(...pos) : Infinity;
+    if (mx > 65) al.push({ nivel: "w", texto: "H\xE1 v\xE3os com mais de 65 m: confirmar o limite do fabricante para a tubagem e a estrutura." });
+    if (mn < 20) al.push({ nivel: "w", texto: "H\xE1 v\xE3os com menos de 20 m: valor pouco habitual, confirmar." });
+    const t = num(g2.theta);
+    if (t === null || t > 360 || t <= 0) al.push({ nivel: "b", texto: "O \xE2ngulo de funcionamento tem de estar entre 0 e 360\xB0." });
+    if (c.L > 800) al.push({ nivel: "w", texto: "Comprimento superior a 800 m: confirmar a viabilidade do equipamento." });
+    if (g2.gun && !(c.G > 0)) al.push({ nivel: "b", texto: "Canh\xE3o ativo sem alcance definido." });
+    if (g2.gun && c.th < 360) al.push({ nivel: "i", texto: "Com canh\xE3o e setor parcial, o desenho mostra o alcance do canh\xE3o a tracejado." });
+    if (!num(par.len) || !num(par.wid)) {
+      al.push({ nivel: "i", texto: "Informa\xE7\xE3o em falta: dimens\xF5es da parcela (m\xF3dulo 02) para calcular a \xE1rea dentro da parcela." });
+    } else if (pc) {
+      if (pc.outside > 0.05 * c.As) al.push({ nivel: "w", texto: `Mais de 5 % da \xE1rea irrigada fica fora da parcela (${fmt(pc.outside, 2)} ha). Ajuste a posi\xE7\xE3o do pivot.` });
+      if (pc.pct < 60) al.push({ nivel: "w", texto: `Apenas ${fmt(pc.pct, 1)} % da parcela fica irrigada; os cantos ficam por cobrir (comum em pivots circulares).` });
+    }
+    if (!al.some((a) => a.nivel === "b" || a.nivel === "w"))
+      al.push({ nivel: "ok", texto: "Dados geom\xE9tricos coerentes com os crit\xE9rios definidos. Este \xE9 um c\xE1lculo geom\xE9trico: n\xE3o substitui a valida\xE7\xE3o t\xE9cnica do projeto." });
+    return al;
+  }
+  function alertasParcela(par, areaTot) {
+    const al = [];
+    const l = num(par.len), w = num(par.wid), zmin = num(par.zmin), zmax = num(par.zmax), s = num(par.slope), ar = num(areaTot);
+    if (zmin !== null && zmax !== null && zmax < zmin) al.push({ nivel: "b", texto: "A cota m\xE1xima \xE9 inferior \xE0 cota m\xEDnima." });
+    if (s !== null && s > 15) al.push({ nivel: "w", texto: "Declive superior a 15 %: verificar a adequa\xE7\xE3o de um pivot e o escoamento superficial." });
+    if (l && w && ar && Math.abs(l * w / 1e4 - ar) / ar > 0.15)
+      al.push({ nivel: "w", texto: `A \xE1rea calculada (${fmt(l * w / 1e4, 2)} ha) difere mais de 15 % da \xE1rea total da explora\xE7\xE3o (${fmt(ar, 2)} ha).` });
+    if (!l || !w) al.push({ nivel: "i", texto: "Informa\xE7\xE3o em falta: comprimento e largura da parcela." });
+    if (num(par.inf) === null) al.push({ nivel: "i", texto: "Informa\xE7\xE3o em falta: taxa de infiltra\xE7\xE3o do solo (necess\xE1ria para verificar a intensidade de aplica\xE7\xE3o)." });
+    if (!al.length) al.push({ nivel: "ok", texto: "Dados da parcela coerentes com os crit\xE9rios definidos." });
+    return al;
+  }
+
+  // agro.ts
+  var CULTURAS = {
+    Milho: { zr: "1.0", fases: [{ n: "Inicial", d: "25", kc: "0.30" }, { n: "Desenvolvimento", d: "40", kc: "" }, { n: "Interm\xE9dia", d: "45", kc: "1.20" }, { n: "Final", d: "30", kc: "0.60" }] },
+    Tomate: { zr: "0.7", fases: [{ n: "Inicial", d: "30", kc: "0.60" }, { n: "Desenvolvimento", d: "40", kc: "" }, { n: "Interm\xE9dia", d: "45", kc: "1.15" }, { n: "Final", d: "30", kc: "0.80" }] },
+    Batata: { zr: "0.5", fases: [{ n: "Inicial", d: "25", kc: "0.50" }, { n: "Desenvolvimento", d: "30", kc: "" }, { n: "Interm\xE9dia", d: "45", kc: "1.15" }, { n: "Final", d: "30", kc: "0.75" }] },
+    Luzerna: { zr: "1.2", fases: [{ n: "Inicial", d: "10", kc: "0.40" }, { n: "Desenvolvimento", d: "20", kc: "" }, { n: "Interm\xE9dia", d: "20", kc: "1.20" }, { n: "Final", d: "10", kc: "1.15" }] },
+    Trigo: { zr: "1.0", fases: [{ n: "Inicial", d: "20", kc: "0.40" }, { n: "Desenvolvimento", d: "30", kc: "" }, { n: "Interm\xE9dia", d: "40", kc: "1.15" }, { n: "Final", d: "30", kc: "0.35" }] },
+    Girassol: { zr: "0.9", fases: [{ n: "Inicial", d: "25", kc: "0.35" }, { n: "Desenvolvimento", d: "35", kc: "" }, { n: "Interm\xE9dia", d: "45", kc: "1.15" }, { n: "Final", d: "25", kc: "0.35" }] },
+    Personalizada: { zr: "0.6", fases: [{ n: "Inicial", d: "20", kc: "0.40" }, { n: "Desenvolvimento", d: "30", kc: "" }, { n: "Interm\xE9dia", d: "40", kc: "1.00" }, { n: "Final", d: "20", kc: "0.60" }] }
+  };
+  var AWC_TIPICO = { Arenoso: 80, Franco: 150, Argiloso: 180 };
+  function agroPadrao() {
+    const c = CULTURAS.Milho;
+    return {
+      crop: "Milho",
+      variety: "",
+      plantDate: "",
+      fase: 2,
+      et0: "7",
+      et0m: "",
+      pe: "0",
+      zr: c.zr,
+      awc: "",
+      p: "0.5",
+      ef: "85",
+      fases: c.fases.map((f) => ({ ...f }))
+    };
+  }
+  function curvaKc(fases) {
+    var _a, _b, _c;
+    const d = fases.map((f) => {
+      var _a2;
+      return Math.max(0, Math.round((_a2 = num(f.d)) != null ? _a2 : 0));
+    });
+    const kIni = (_a = num(fases[0].kc)) != null ? _a : 0, kMid = (_b = num(fases[2].kc)) != null ? _b : 0, kEnd = (_c = num(fases[3].kc)) != null ? _c : 0;
+    const out = [];
+    for (let i = 0; i < d[0]; i++) out.push(kIni);
+    for (let i = 0; i < d[1]; i++) out.push(kIni + (kMid - kIni) * (i + 1) / (d[1] + 1));
+    for (let i = 0; i < d[2]; i++) out.push(kMid);
+    for (let i = 0; i < d[3]; i++) out.push(kMid + (kEnd - kMid) * (i + 1) / d[3]);
+    return out;
+  }
+  function kcFase(fases, i) {
+    const kIni = num(fases[0].kc), kMid = num(fases[2].kc), kEnd = num(fases[3].kc);
+    if (i === 0) return kIni;
+    if (i === 2) return kMid;
+    if (i === 1) return kIni !== null && kMid !== null ? (kIni + kMid) / 2 : null;
+    return kMid !== null && kEnd !== null ? (kMid + kEnd) / 2 : null;
+  }
+  function calcAgro(a, areaHa, awcSolo) {
+    var _a, _b, _c, _d;
+    const et0 = num(a.et0), pe = (_a = num(a.pe)) != null ? _a : 0, ef = ((_b = num(a.ef)) != null ? _b : 0) / 100;
+    const kc = kcFase(a.fases, a.fase);
+    const etc = et0 !== null && kc !== null ? et0 * kc : null;
+    const nliq = etc !== null ? Math.max(0, etc - pe) : null;
+    const nbruta = nliq !== null && ef > 0 ? nliq / ef : null;
+    const curva = curvaKc(a.fases);
+    const et0m = (_c = num(a.et0m)) != null ? _c : et0;
+    let sazMm = null;
+    if (et0m !== null && ef > 0 && curva.length) sazMm = curva.reduce((s, k) => s + Math.max(0, et0m * k - pe), 0) / ef;
+    const zr = num(a.zr), p = num(a.p);
+    const awc = (_d = num(a.awc)) != null ? _d : awcSolo;
+    const taw = awc !== null && zr !== null ? awc * zr : null;
+    const raw = taw !== null && p !== null ? taw * p : null;
+    const intervalo = raw !== null && etc !== null && etc > 0 ? raw / etc : null;
+    const m = (mm) => mm === null ? null : mm * areaHa * 10;
+    return {
+      kc,
+      etc,
+      nliq,
+      nbruta,
+      semanal: nbruta !== null ? nbruta * 7 : null,
+      m3dia: m(nbruta),
+      m3semana: nbruta !== null ? m(nbruta * 7) : null,
+      sazMm,
+      sazM3: m(sazMm),
+      ciclo: curva.length,
+      taw,
+      raw,
+      intervalo,
+      curva
+    };
+  }
+
+  // hydraulic.ts
+  var g = 9.81;
+  var NU = 1004e-9;
+  var BAR_M = 10.197;
+  var SDR = { "PEAD PN10": 17, "PEAD PN16": 11 };
+  var DN_PEAD = [63, 75, 90, 110, 125, 160, 200, 250, 315, 400];
+  var DN_ACO = [100, 125, 150, 200, 250, 300];
+  var MATERIAIS = {
+    "PEAD PN10": { C: 140, eps: 7e-3, pn: 10, dns: DN_PEAD, id: (dn) => dn - 2 * (dn / SDR["PEAD PN10"]) },
+    "PEAD PN16": { C: 140, eps: 7e-3, pn: 16, dns: DN_PEAD, id: (dn) => dn - 2 * (dn / SDR["PEAD PN16"]) },
+    A\u00E7o: { C: 120, eps: 0.15, pn: null, dns: DN_ACO, id: (dn) => dn },
+    Personalizado: { C: 130, eps: 0.05, pn: null, dns: [], id: (dn) => dn }
+  };
+  var TIPOS = {
+    asp: { nome: "Conduta de aspira\xE7\xE3o", vmax: 1.5 },
+    prin: { nome: "Conduta principal", vmax: 2 },
+    dist: { nome: "Conduta de distribui\xE7\xE3o", vmax: 2 },
+    pivot: { nome: "Conduta do pivot", vmax: 3 }
+  };
+  function trocoNovo(kind, name) {
+    return {
+      id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+      name: name != null ? name : TIPOS[kind].nome,
+      kind,
+      mat: kind === "pivot" ? "A\xE7o" : "PEAD PN10",
+      dn: kind === "pivot" ? "150" : "200",
+      idc: "",
+      L: kind === "pivot" ? "" : "100",
+      dz: "0",
+      k: "0",
+      nOut: "100",
+      prices: {}
+    };
+  }
+  function hidPadrao() {
+    return {
+      horas: "20",
+      pc: "2",
+      pdisp: "",
+      qman: "",
+      method: "DW",
+      segs: [trocoNovo("asp"), trocoNovo("prin"), trocoNovo("pivot")]
+    };
+  }
+  function diametroInterno(t, dnOverride) {
+    if (t.mat === "Personalizado" && dnOverride === void 0) {
+      const v = num(t.idc);
+      return v && v > 0 ? v / 1e3 : null;
+    }
+    const dn = dnOverride != null ? dnOverride : num(t.dn);
+    if (!dn || dn <= 0) return null;
+    return MATERIAIS[t.mat].id(dn) / 1e3;
+  }
+  function christiansen(N, m) {
+    if (!(N >= 1)) return 1;
+    return 1 / (m + 1) + 1 / (2 * N) + Math.sqrt(m - 1) / (6 * N * N);
+  }
+  function fatorAtrito(D, eps, Re) {
+    if (Re < 2e3) return 64 / Re;
+    return 0.25 / Math.pow(Math.log10(eps / 1e3 / (3.7 * D) + 5.74 / Math.pow(Re, 0.9)), 2);
+  }
+  function perdasTroco(t, Qh, D, method) {
+    var _a, _b, _c;
+    const Q = Qh / 3600;
+    const L = Math.max(0, (_a = num(t.L)) != null ? _a : 0);
+    const m = MATERIAIS[t.mat];
+    const C = m.C;
+    const eps = t.mat === "Personalizado" ? 0.05 : m.eps;
+    const A = Math.PI * D * D / 4;
+    const V = Q / A;
+    const Re = V * D / NU;
+    const f = V > 0 ? fatorAtrito(D, eps, Re) : 0;
+    const F = t.kind === "pivot" ? christiansen((_b = num(t.nOut)) != null ? _b : 1, method === "DW" ? 2 : 1.852) : 1;
+    const hfDW = f * (L / D) * (V * V / (2 * g)) * F;
+    const hfHW = Q > 0 ? 10.67 * L * Math.pow(Q, 1.852) / (Math.pow(C, 1.852) * Math.pow(D, 4.871)) * F : 0;
+    const hl = ((_c = num(t.k)) != null ? _c : 0) * (V * V / (2 * g));
+    return { V, Re, f, hfDW, hfHW, hf: method === "DW" ? hfDW : hfHW, hl, F };
+  }
+  function estadoVelocidade(kind, V) {
+    const vmax = TIPOS[kind].vmax;
+    if (V > vmax * 1.25) return { e: "erro", txt: `acima de ${String(vmax).replace(".", ",")} m/s` };
+    if (V > vmax) return { e: "aviso", txt: `acima de ${String(vmax).replace(".", ",")} m/s` };
+    if (V < 0.5) return { e: "info", txt: "abaixo de 0,5 m/s" };
+    return { e: "ok", txt: "dentro dos limites" };
+  }
+  function comparar(t, Qh, method) {
+    const mat = MATERIAIS[t.mat];
+    const sel = num(t.dn);
+    return mat.dns.map((dn) => {
+      var _a;
+      const D = mat.id(dn) / 1e3;
+      const r = perdasTroco(t, Qh, D, method);
+      const preco = num(t.prices[String(dn)]);
+      const L = (_a = num(t.L)) != null ? _a : 0;
+      return { dn, id: D * 1e3, V: r.V, hf: r.hf, hl: r.hl, estado: estadoVelocidade(t.kind, r.V), custo: preco !== null ? preco * L : null, selecionado: sel === dn };
+    });
+  }
+  function calcHid(h, qAgro) {
+    var _a;
+    const qm = num(h.qman);
+    const Q = qm !== null && qm > 0 ? qm : qAgro;
+    const origemQ = qm !== null && qm > 0 ? "manual" : Q !== null ? "agron\xF3mico" : null;
+    const trocos = h.segs.map((t) => {
+      var _a2;
+      const D = diametroInterno(t);
+      const dz = (_a2 = num(t.dz)) != null ? _a2 : 0;
+      if (Q === null || D === null) return { t, D, p: null, dz, estado: null, pEntrada: null };
+      const p = perdasTroco(t, Q, D, h.method);
+      return { t, D, p, dz, estado: estadoVelocidade(t.kind, p.V), pEntrada: null };
+    });
+    const pcM = ((_a = num(h.pc)) != null ? _a : 0) * BAR_M;
+    let jus = pcM;
+    for (let i = trocos.length - 1; i >= 0; i--) {
+      const r = trocos[i];
+      if (!r.p) {
+        r.pEntrada = null;
+        continue;
+      }
+      jus += r.p.hf + r.p.hl + r.dz;
+      r.pEntrada = r.t.kind === "asp" ? null : jus;
+    }
+    const comP = trocos.filter((r) => r.p);
+    const somaHf = comP.reduce((s, r) => s + r.p.hf, 0);
+    const somaHl = comP.reduce((s, r) => s + r.p.hl, 0);
+    const somaDz = trocos.reduce((s, r) => s + r.dz, 0);
+    const completo = Q !== null && trocos.length > 0 && comP.length === trocos.length;
+    const hmtParcial = completo ? pcM + somaHf + somaHl + somaDz : null;
+    const rede = trocos.filter((r) => r.t.kind !== "asp");
+    const necRede = completo ? pcM + rede.reduce((s, r) => s + r.p.hf + r.p.hl + r.dz, 0) : null;
+    const pd = num(h.pdisp);
+    const margem = necRede !== null && pd !== null ? pd * BAR_M - necRede : null;
+    const al = [];
+    if (Q === null) al.push({ nivel: "i", texto: "Informa\xE7\xE3o em falta: caudal. Complete o m\xF3dulo 04 (agronomia) e a geometria, ou indique um caudal manual." });
+    trocos.forEach((r) => {
+      var _a2;
+      if (r.D === null) al.push({ nivel: "i", texto: `${r.t.name}: informa\xE7\xE3o em falta (di\xE2metro interno).` });
+      if (r.estado && (r.estado.e === "aviso" || r.estado.e === "erro"))
+        al.push({ nivel: r.estado.e === "erro" ? "b" : "w", texto: `${r.t.name}: velocidade de ${r.p.V.toFixed(2).replace(".", ",")} m/s ${r.estado.txt}.` });
+      if (((_a2 = r.estado) == null ? void 0 : _a2.e) === "info") al.push({ nivel: "i", texto: `${r.t.name}: velocidade baixa (${r.p.V.toFixed(2).replace(".", ",")} m/s), risco de sedimenta\xE7\xE3o.` });
+      const pn = MATERIAIS[r.t.mat].pn;
+      if (pn && r.pEntrada !== null && r.pEntrada > pn * BAR_M)
+        al.push({ nivel: "b", texto: `${r.t.name}: press\xE3o estimada \xE0 entrada (${(r.pEntrada / BAR_M).toFixed(1).replace(".", ",")} bar) acima da press\xE3o nominal ${r.t.mat} (${pn} bar).` });
+    });
+    if (margem !== null) al.push(margem < 0 ? { nivel: "b", texto: `Press\xE3o dispon\xEDvel insuficiente: faltam ${Math.abs(margem).toFixed(1).replace(".", ",")} m c.a.` } : { nivel: "ok", texto: `Press\xE3o dispon\xEDvel suficiente, com margem de ${margem.toFixed(1).replace(".", ",")} m c.a.` });
+    if (!al.some((a) => a.nivel === "b" || a.nivel === "w" || a.nivel === "i"))
+      al.push({ nivel: "ok", texto: "Velocidades dentro dos crit\xE9rios. Resultado calculado: n\xE3o substitui a valida\xE7\xE3o t\xE9cnica do projeto." });
+    return { Q, origemQ, trocos, somaHf, somaHl, somaDz, pcM, hmtParcial, necessariaRede: necRede, margem, alertas: al };
+  }
+  function caudalSistema(nbrutaMmDia, areaHa, horas) {
+    if (nbrutaMmDia === null || !horas || horas <= 0 || areaHa <= 0) return null;
+    return nbrutaMmDia * areaHa * 10 / horas;
+  }
+
+  // emit.ts
+  var TIPOS_EMISSOR = ["MESA", "LESA", "LEPA", "Spray", "Aspersor de impacto"];
+  function emitPadrao() {
+    return { libId: "", tipo: "MESA", fab: "", modelo: "", bocal: "", p: "1.4", q: "", wd: "", s: "2.5", h: "2.5", reg: "", Qg: "0" };
+  }
+  function modeloVazio() {
+    return { tipo: "MESA", fab: "", modelo: "", bocal: "", p: "1.4", q: "", wd: "", s: "2.5", h: "2.5", reg: "" };
+  }
+  function calcEmit(e, L, Qtot, D, pcM, eps, inf) {
+    var _a;
+    const falta = [];
+    const s = num(e.s), pref = num(e.p), qref = num(e.q), wd = num(e.wd), reg = num(e.reg);
+    const Qg = Math.max(0, (_a = num(e.Qg)) != null ? _a : 0);
+    if (!s || s <= 0) falta.push("espa\xE7amento");
+    if (!(L > 0)) falta.push("comprimento do pivot (m\xF3dulo 03)");
+    if (Qtot === null || Qtot <= 0) falta.push("caudal (m\xF3dulos 04/05)");
+    if (D === null) falta.push("di\xE2metro da conduta do pivot (m\xF3dulo 05)");
+    if (!pref || pref <= 0) falta.push("press\xE3o de refer\xEAncia do emissor");
+    const vazio = { ok: false, N: 0, pontos: [], qMin: 0, qMax: 0, pMin: 0, pMax: 0, varP: 0, qTotalEmit: 0, imax: null, incompleto: falta, alertas: [] };
+    if (falta.length || !s || !pref || Qtot === null || D === null) {
+      vazio.alertas = [{ nivel: "i", texto: `Informa\xE7\xE3o em falta: ${falta.join(", ")}.` }];
+      return vazio;
+    }
+    const N = Math.floor(L / s);
+    if (N < 1) {
+      vazio.alertas = [{ nivel: "b", texto: "O espa\xE7amento \xE9 maior do que o comprimento do pivot." }];
+      return vazio;
+    }
+    const Qe = Math.max(0, Qtot - Qg);
+    const r = Array.from({ length: N }, (_, k) => L - (N - 1 - k) * s);
+    const sw = r.reduce((a, b) => a + b, 0);
+    const q = r.map((ri) => Qe * 1e3 * ri / sw);
+    const flowAfter = new Array(N);
+    let acc = Qg;
+    for (let k = N - 1; k >= 0; k--) {
+      acc += q[k] / 1e3;
+      flowAfter[k] = acc;
+    }
+    const A = Math.PI * D * D / 4;
+    let hf = 0;
+    const pontos = [];
+    let prev = 0;
+    for (let k = 0; k < N; k++) {
+      const len = r[k] - prev;
+      const V = flowAfter[k] / 3600 / A;
+      const Re = V * D / 1004e-9;
+      const f = V > 0 ? fatorAtrito(D, eps, Re) : 0;
+      hf += f * (len / D) * (V * V / (2 * 9.81));
+      prev = r[k];
+      const pAv = Math.max(0, pcM - hf);
+      const pBar = pAv / BAR_M;
+      const pOp = reg && reg > 0 ? pBar >= reg ? reg : pBar : pBar;
+      const qCat = pOp > 0 ? q[k] * Math.sqrt(pref / pOp) : null;
+      const qAct = qref ? qref * Math.sqrt(pOp / pref) : null;
+      pontos.push({ i: k + 1, r: r[k], qDes: q[k], acum: flowAfter[k], hf, pBar, pOp, qCat, qAct });
+    }
+    const ps = pontos.map((x) => x.pBar);
+    const pMin = Math.min(...ps), pMax = Math.max(...ps);
+    const varP = pMax > 0 ? (pMax - pMin) / pMax * 100 : 0;
+    const qTip = q[N - 1];
+    const imax = wd && wd > 0 ? 4 / Math.PI * (qTip / (Math.PI / 4 * wd * wd)) : null;
+    const al = [];
+    if (pMin <= 0) al.push({ nivel: "b", texto: "A press\xE3o chega a zero na ponta: a conduta ou a press\xE3o no centro s\xE3o insuficientes." });
+    else if (pMin < 0.7) al.push({ nivel: "w", texto: `Press\xE3o m\xEDnima de ${pMin.toFixed(2).replace(".", ",")} bar nos emissores: baixa para um bom funcionamento.` });
+    if (reg && reg > 0 && pMin < reg) al.push({ nivel: "b", texto: `H\xE1 emissores com press\xE3o dispon\xEDvel (${pMin.toFixed(2).replace(".", ",")} bar) inferior \xE0 do regulador (${reg} bar): o regulador n\xE3o consegue regular.` });
+    if (!reg && varP > 20) al.push({ nivel: "w", texto: `Varia\xE7\xE3o de press\xE3o ao longo do pivot de ${varP.toFixed(0)} %: sem reguladores a uniformidade \xE9 afetada (refer\xEAncia: at\xE9 20 %).` });
+    if (imax !== null && inf !== null) {
+      if (imax > inf) al.push({ nivel: "b", texto: `Taxa de aplica\xE7\xE3o de pico (${imax.toFixed(0)} mm/h) superior \xE0 infiltra\xE7\xE3o do solo (${inf} mm/h): risco de escoamento.` });
+      else if (imax > 0.8 * inf) al.push({ nivel: "w", texto: `Taxa de aplica\xE7\xE3o de pico (${imax.toFixed(0)} mm/h) acima de 80 % da infiltra\xE7\xE3o (${inf} mm/h).` });
+    }
+    if (imax === null) al.push({ nivel: "i", texto: "Informa\xE7\xE3o em falta: di\xE2metro molhado do emissor, para calcular a taxa de aplica\xE7\xE3o de pico." });
+    if (inf === null) al.push({ nivel: "i", texto: "Informa\xE7\xE3o em falta: infiltra\xE7\xE3o do solo (m\xF3dulo 02) para verificar a compatibilidade." });
+    if (Qg > 0) al.push({ nivel: "i", texto: `O caudal do canh\xE3o (${Qg.toString().replace(".", ",")} m\xB3/h) foi retirado ao caudal distribu\xEDdo pelos emissores.` });
+    if (!al.some((a) => a.nivel === "b" || a.nivel === "w"))
+      al.push({ nivel: "ok", texto: "Distribui\xE7\xE3o de caudal e press\xE3o dentro dos crit\xE9rios definidos. Valores calculados: confirmar com o cat\xE1logo do fabricante." });
+    return { ok: true, N, pontos, qMin: Math.min(...q), qMax: Math.max(...q), pMin, pMax, varP, qTotalEmit: Qe, imax, incompleto: [], alertas: al };
+  }
+
+  // pump.ts
+  var MOTORES_KW = [0.37, 0.55, 0.75, 1.1, 1.5, 2.2, 3, 4, 5.5, 7.5, 11, 15, 18.5, 22, 30, 37, 45, 55, 75, 90, 110, 132, 160, 200, 250, 315];
+  function bombPadrao() {
+    return { cotaCapt: "0", cotaPivot: "0", nivDin: "0", margemH: "5", etaB: "70", etaM: "92", margemM: "15", tarifa: "0.15", bombaSel: "" };
+  }
+  function proximoMotor(kw) {
+    var _a;
+    return (_a = MOTORES_KW.find((m) => m >= kw)) != null ? _a : null;
+  }
+  function calcHmt(b, pcM, perdas) {
+    var _a, _b, _c, _d;
+    const estatica = ((_a = num(b.cotaPivot)) != null ? _a : 0) - ((_b = num(b.cotaCapt)) != null ? _b : 0) + ((_c = num(b.nivDin)) != null ? _c : 0);
+    const liquida = estatica + pcM + perdas;
+    const margem = liquida * (((_d = num(b.margemH)) != null ? _d : 0) / 100);
+    return { estatica, pc: pcM, perdas, liquida, margem, total: liquida + margem };
+  }
+  function calcPotencias(Q, H, etaB, etaM, margemM) {
+    const Ph = Q * H / 367.2;
+    const Pa = etaB > 0 ? Ph / (etaB / 100) : NaN;
+    const Pel = etaM > 0 ? Pa / (etaM / 100) : NaN;
+    const Pm = Pa * (1 + margemM / 100);
+    return { Ph, Pa, Pm: Number.isFinite(Pm) ? Pm : null, motor: Number.isFinite(Pm) ? proximoMotor(Pm) : null, Pel };
+  }
+  function pontosValidos(m) {
+    return m.pontos.map((p) => ({ q: num(p.q), h: num(p.h), eta: num(p.eta) })).filter((p) => p.q !== null && p.h !== null && p.q >= 0).sort((a, b) => a.q - b.q);
+  }
+  function interp(pts, q, key) {
+    if (pts.length < 2 || q < pts[0].q || q > pts[pts.length - 1].q) return null;
+    for (let i = 1; i < pts.length; i++) {
+      if (q <= pts[i].q) {
+        const a = pts[i - 1], b = pts[i];
+        const va = key === "h" ? a.h : a.eta, vb = key === "h" ? b.h : b.eta;
+        if (va === null || vb === null) return null;
+        const t = b.q === a.q ? 0 : (q - a.q) / (b.q - a.q);
+        return va + (vb - va) * t;
+      }
+    }
+    return null;
+  }
+  function alturaSistema(Q, Q0, estaticaPc, hf, hl, margemPct) {
+    const x = Q0 > 0 ? Q / Q0 : 0;
+    return (estaticaPc + hf * Math.pow(x, 1.852) + hl * x * x) * (1 + margemPct / 100);
+  }
+  function pontoFuncionamento(m, Q0, estaticaPc, hf, hl, margemPct) {
+    const pts = pontosValidos(m);
+    if (pts.length < 2) return null;
+    const f = (q) => interp(pts, q, "h") - alturaSistema(q, Q0, estaticaPc, hf, hl, margemPct);
+    const qa = pts[0].q, qb = pts[pts.length - 1].q;
+    const N = 400;
+    let prev = qa, fp = f(qa);
+    for (let i = 1; i <= N; i++) {
+      const q = qa + (qb - qa) * i / N;
+      const fc = f(q);
+      if (fp >= 0 && fc <= 0) {
+        let lo = prev, hi = q;
+        for (let k = 0; k < 50; k++) {
+          const mid = (lo + hi) / 2;
+          if (f(lo) * f(mid) <= 0) hi = mid;
+          else lo = mid;
+        }
+        const qo = (lo + hi) / 2;
+        const h = interp(pts, qo, "h");
+        const eta = interp(pts, qo, "eta");
+        return { q: qo, h, eta, Pabs: eta && eta > 0 ? qo * h / 367.2 / (eta / 100) : null };
+      }
+      prev = q;
+      fp = fc;
+    }
+    return null;
+  }
+  function motivoSemPonto(m, Q0, estaticaPc, hf, hl, margemPct) {
+    const pts = pontosValidos(m);
+    if (pts.length < 2) return null;
+    const qa = pts[0].q, qb = pts[pts.length - 1].q;
+    const dA = pts[0].h - alturaSistema(qa, Q0, estaticaPc, hf, hl, margemPct);
+    const dB = pts[pts.length - 1].h - alturaSistema(qb, Q0, estaticaPc, hf, hl, margemPct);
+    if (dB > 0) return "excede";
+    if (dA < 0) return "insuficiente";
+    return null;
+  }
+
+  // progress.ts
+  function progresso(p) {
+    const g2 = p.geo;
+    const gOk = [
+      g2.spans.length > 0,
+      num(g2.lb) !== null,
+      !!num(g2.theta),
+      !g2.gun || num(g2.G) !== null,
+      g2.spans.every((s) => {
+        var _a;
+        return ((_a = num(s)) != null ? _a : 0) > 0;
+      })
+    ].filter(Boolean).length;
+    const pf = ["len", "wid", "zmin", "zmax", "slope", "soil", "inf", "ret"];
+    const pOk = pf.filter((k) => String(p.par[k]).trim() !== "").length;
+    const jf = ["name", "client", "loc", "parcel", "areaTot", "crop", "water", "tech"];
+    const jOk = jf.filter((k) => String(p[k]).trim() !== "").length;
+    const af = ["crop", "et0", "pe", "zr", "p", "ef"];
+    const aOk = af.filter((k) => String(p.agro[k]).trim() !== "").length + (p.agro.fases.every((f, i) => i === 1 || String(f.kc).trim() !== "") ? 1 : 0);
+    const hOk = [String(p.hid.horas).trim() !== "", String(p.hid.pc).trim() !== "", ...p.hid.segs.map((t) => (t.mat === "Personalizado" ? String(t.idc).trim() !== "" : String(t.dn).trim() !== "") && String(t.L).trim() !== "")];
+    const ef2 = ["p", "q", "wd", "s"];
+    const eOk = ef2.filter((k) => String(p.emit[k]).trim() !== "").length;
+    const bf = ["cotaCapt", "cotaPivot", "nivDin", "etaB", "etaM", "tarifa"];
+    const bOk = bf.filter((k) => String(p.bomb[k]).trim() !== "").length + (p.bomb.bombaSel ? 1 : 0);
+    return { emit: Math.round(eOk / ef2.length * 100), bomb: Math.round(bOk / (bf.length + 1) * 100), agro: Math.round(aOk / (af.length + 1) * 100), hid: Math.round(hOk.filter(Boolean).length / hOk.length * 100), geo: Math.round(gOk / 5 * 100), par: Math.round(pOk / pf.length * 100), proj: Math.round(jOk / jf.length * 100) };
+  }
+
+  // storage.ts
+  var uid = () => "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  var hoje = () => (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+  function novoProjeto(name = "Novo projeto") {
+    return {
+      id: uid(),
+      name,
+      client: "",
+      loc: "",
+      parcel: "",
+      areaTot: "",
+      crop: "",
+      water: "Furo",
+      tech: "",
+      created: hoje(),
+      arch: 0,
+      par: { len: "", wid: "", zmin: "", zmax: "", slope: "", soil: "Franco", inf: "", ret: "", lat: "", lon: "" },
+      geo: { spans: [60, 60, 60, 60, 60, 60], lb: 20, gun: false, G: 0, theta: 360, start: 0, ox: 0, oy: 0 },
+      agro: agroPadrao(),
+      hid: hidPadrao(),
+      emit: emitPadrao(),
+      bomb: bombPadrao()
+    };
+  }
+  function normalizar(q) {
+    const n = novoProjeto();
+    const geo = { ...n.geo, ...q.geo || {} };
+    if (!Array.isArray(geo.spans) || !geo.spans.length) geo.spans = n.geo.spans;
+    const agro = { ...n.agro, ...q.agro || {} };
+    if (!Array.isArray(agro.fases) || agro.fases.length !== 4) agro.fases = n.agro.fases;
+    const hid = { ...n.hid, ...q.hid || {} };
+    if (!Array.isArray(hid.segs) || !hid.segs.length) hid.segs = n.hid.segs;
+    hid.segs = hid.segs.map((t) => ({ ...t, prices: t.prices || {} }));
+    return { ...n, ...q, par: { ...n.par, ...q.par || {} }, geo, agro, hid, emit: { ...n.emit, ...q.emit || {} }, bomb: { ...n.bomb, ...q.bomb || {} } };
+  }
+  return __toCommonJS(entry_exports);
+})();
+
 var KEY='ir_pivot',MODS=[
 ['01','Projetos e explorações','Criar, editar e gerir projetos',1],
 ['02','Caracterização da parcela','Localização, terreno e solo',1],
 ['03','Dimensionamento geométrico','Raio, vãos, torres e área',1],
-['04','Dimensionamento agronómico','Culturas, ET0, Kc',0,'Fase 3'],
-['05','Dimensionamento hidráulico','Caudais, tubagens, perdas',0,'Fase 3'],
-['06','Aspersores e emissores','Débitos e distribuição',0,'Fase 4'],
-['07','Bombagem e energia','HMT, potência, consumo',0,'Fase 4'],
+['04','Dimensionamento agronómico','Culturas, ET0, Kc',1],
+['05','Dimensionamento hidráulico','Caudais, tubagens, perdas',1],
+['06','Aspersores e emissores','Débitos e distribuição',1],
+['07','Bombagem e energia','HMT, potência, consumo',1],
 ['08','Planeamento da rega','Dotações e calendários',0,'Fase 5'],
 ['09','Simulação e análise','Cenários e desempenho',0,'Fase 5'],
 ['10','Relatórios técnicos','Memória descritiva, PDF',0,'Fase 6']];
@@ -95,10 +741,8 @@ var ST={list:[],cur:null,mod:'01'};
 function $(i){return document.getElementById(i)}
 function uid(){return 'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function today(){return new Date().toISOString().slice(0,10)}
-function newProj(name){return{id:uid(),name:name||'Novo projeto',client:'',loc:'',parcel:'',areaTot:'',crop:'',water:'Furo',tech:'',created:today(),arch:0,
-par:{len:'',wid:'',zmin:'',zmax:'',slope:'',soil:'Franco',inf:'',ret:'',lat:'',lon:''},
-geo:{spans:[60,60,60,60,60,60],lb:20,gun:false,G:0,theta:360,start:0,ox:0,oy:0}}}
-function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.list){ST.list=d.list;ST.cur=d.cur;ST.mod=d.mod||'01'}}catch(e){}
+function newProj(name){return E.novoProjeto(name)}
+function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.list){ST.list=d.list.map(E.normalizar);ST.cur=d.cur;ST.mod=d.mod||'01'}}catch(e){}
 if(!ST.list.length){var p=newProj('Exploração exemplo');ST.list.push(p);ST.cur=p.id}
 if(!P())ST.cur=ST.list[0].id}
 var tmr;function save(){try{localStorage.setItem(KEY,JSON.stringify({list:ST.list,cur:ST.cur,mod:ST.mod}));$('saved').textContent='Guardado automaticamente';clearTimeout(tmr);tmr=setTimeout(function(){$('saved').textContent=''},1800)}catch(e){$('saved').textContent='Sem espaço para guardar'}}
@@ -131,7 +775,7 @@ function side(){var h='<h3>Módulos</h3>';MODS.forEach(function(m){h+='<button c
 [].forEach.call($('side').querySelectorAll('.mod'),function(b){b.onclick=function(){go(b.dataset.m)}})}
 function go(m){ST.mod=m;save();side();render();window.scrollTo({top:0})}
 function render(){var m=ST.mod,x=$('main');
- if(m==='01')vProj(x);else if(m==='02')vPar(x);else if(m==='03')vGeo(x);else vSoon(x,m)}
+ if(m==='01')vProj(x);else if(m==='02')vPar(x);else if(m==='03')vGeo(x);else if(m==='04')vAgro(x);else if(m==='05')vHid(x);else if(m==='06')vEmit(x);else if(m==='07')vBomb(x);else vSoon(x,m)}
 function vSoon(x,m){var d=MODS.filter(function(a){return a[0]===m})[0];x.innerHTML='<div class="card soonbox"><h1>'+d[0]+' · '+d[1]+'</h1><p class="sub">'+d[2]+'</p><span class="pill i ph">Previsto para a '+d[4]+'</span><p class="hint" style="margin-top:14px">Este módulo vai usar automaticamente a área e a geometria calculadas no módulo 03.</p></div>'}
 
 /* ---------- progresso / estado ---------- */
@@ -139,14 +783,14 @@ function prog(p){var g=p.geo,par=p.par;
  var gOk=0,gT=5;if(g.spans.length)gOk++;if(num(g.lb)!==null)gOk++;if(num(g.theta))gOk++;if(!g.gun||num(g.G)!==null)gOk++;if(g.spans.every(function(s){return num(s)>0}))gOk++;
  var pf=['len','wid','zmin','zmax','slope','soil','inf','ret'],pOk=pf.filter(function(k){return String(par[k]).trim()!==''}).length;
  var jf=['name','client','loc','parcel','areaTot','crop','water','tech'],jOk=jf.filter(function(k){return String(p[k]).trim()!==''}).length;
- return{geo:Math.round(gOk/gT*100),par:Math.round(pOk/pf.length*100),proj:Math.round(jOk/jf.length*100),agro:0,hid:0,bomb:0}}
+ var e=E.progresso(p);return{geo:Math.round(gOk/gT*100),par:Math.round(pOk/pf.length*100),proj:Math.round(jOk/jf.length*100),agro:e.agro,hid:e.hid,emit:e.emit,bomb:e.bomb}}
 
 /* ---------- 01 Projetos ---------- */
-function vProj(x){var p=P(),c=Calc.geo(p.geo),pg=prog(p);
+function vProj(x){var p=P(),c=Calc.geo(p.geo),pg=prog(p),pq=pipe(p),hm=E.calcHmt(p.bomb,pq.hid.pcM,pq.hid.somaHf+pq.hid.somaHl),pw=pq.hid.Q?E.calcPotencias(pq.hid.Q,hm.total,E.num(p.bomb.etaB)||0,E.num(p.bomb.etaM)||0,E.num(p.bomb.margemM)||0):null;
  var h='<div class="card"><h1>Centro de dimensionamento</h1><p class="sub">Projeto ativo: <b>'+esc(p.name)+'</b>'+(p.client?' · '+esc(p.client):'')+'</p>'+
- '<div class="kpis"><div class="kpi"><small>Área irrigada</small><b>'+f(c.As,2)+' <em>ha</em></b></div><div class="kpi"><small>Raio do pivot</small><b>'+f(c.R,0)+' <em>m</em></b></div><div class="kpi dim"><small>Caudal de projeto</small><b>— <em>m³/h</em></b></div><div class="kpi dim"><small>Potência estimada</small><b>— <em>kW</em></b></div></div>'+
+ '<div class="kpis"><div class="kpi"><small>Área irrigada</small><b>'+f(c.As,2)+' <em>ha</em></b></div><div class="kpi"><small>Raio do pivot</small><b>'+f(c.R,0)+' <em>m</em></b></div><div class="kpi'+(pq.q===null?' dim':'')+'"><small>Caudal de projeto</small><b>'+f(pq.q,1)+' <em>m³/h</em></b></div><div class="kpi'+(pw?'':' dim')+'"><small>Potência estimada</small><b>'+(pw&&isFinite(pw.Pa)?f(pw.Pa,1):'—')+' <em>kW</em></b></div></div>'+
  '<h3 class="s">Progresso do dimensionamento</h3>'+
- [['Projeto',pg.proj],['Parcela',pg.par],['Geometria',pg.geo],['Agronomia',0],['Hidráulica',0],['Bombagem',0]].map(function(r){return '<div class="prow"><span>'+r[0]+'</span><div class="bar"><i style="width:'+r[1]+'%"></i></div><b>'+r[1]+'%</b></div>'}).join('')+'</div>';
+ [['Projeto',pg.proj],['Parcela',pg.par],['Geometria',pg.geo],['Agronomia',pg.agro],['Hidráulica',pg.hid],['Emissores',pg.emit],['Bombagem',pg.bomb]].map(function(r){return '<div class="prow"><span>'+r[0]+'</span><div class="bar"><i style="width:'+r[1]+'%"></i></div><b>'+r[1]+'%</b></div>'}).join('')+'</div>';
  h+='<div class="card"><h2>Ficha do projeto</h2><div class="grid g3">'+
  fld('Nome do projeto','name',p.name)+fld('Cliente / exploração','client',p.client)+fld('Localização','loc',p.loc)+fld('Identificação da parcela','parcel',p.parcel)+fld('Área total da exploração (ha)','areaTot',p.areaTot,'number')+fld('Tipo de cultura','crop',p.crop)+
  '<label>Fonte de abastecimento<select data-k="water">'+['Furo','Barragem','Canal','Reservatório','Rede pública'].map(function(o){return '<option'+(p.water===o?' selected':'')+'>'+o+'</option>'}).join('')+'</select></label>'+fld('Técnico responsável','tech',p.tech)+fld('Data de criação','created',p.created,'date')+'</div></div>';
@@ -154,7 +798,7 @@ function vProj(x){var p=P(),c=Calc.geo(p.geo),pg=prog(p);
  x.innerHTML=h;bindFields(x,p,function(k){if(k==='name'||k==='client')listP()});
  $('pn').onclick=function(){var n=prompt('Nome do novo projeto:','Novo projeto');if(n===null)return;var q=newProj(n.trim()||'Novo projeto');ST.list.unshift(q);ST.cur=q.id;save();render()};
  $('pex').onclick=function(){var b=new Blob([JSON.stringify({app:'imper-regas-pivot',v:1,list:ST.list},null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='pivot-projetos-'+today()+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)};
- $('pim').onchange=function(e){var fl=e.target.files[0];if(!fl)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d.list||!d.list.length)throw 0;d.list.forEach(function(q){var n=newProj();q.par=Object.assign(n.par,q.par||{});q.geo=Object.assign(n.geo,q.geo||{});if(!Array.isArray(q.geo.spans)||!q.geo.spans.length)q.geo.spans=n.geo.spans;q.id=uid();ST.list.push(q)});save();render()}catch(err){alert('Ficheiro inválido.')}};r.readAsText(fl)};
+ $('pim').onchange=function(e){var fl=e.target.files[0];if(!fl)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d.list||!d.list.length)throw 0;d.list.forEach(function(q){var n=E.normalizar(q);n.id=uid();ST.list.push(n)});save();render()}catch(err){alert('Ficheiro inválido.')}};r.readAsText(fl)};
  $('parc').onchange=listP;listP()}
 function listP(){var tb=$('ptb');if(!tb)return;var sh=$('parc')&&$('parc').checked,rows=ST.list.filter(function(p){return sh?true:!p.arch});
  tb.innerHTML=rows.length?rows.map(function(p){var c=Calc.geo(p.geo);return '<tr class="'+(p.id===ST.cur?'sel':'')+'"><td><b>'+esc(p.name)+'</b>'+(p.arch?' <span class="pill w">arquivado</span>':'')+'</td><td>'+esc(p.client)+'</td><td>'+esc(p.created)+'</td><td class="n">'+f(c.As,2)+'</td><td class="noprint"><button class="btn s" data-a="open" data-i="'+p.id+'">Abrir</button> <button class="btn g s" data-a="dup" data-i="'+p.id+'">Duplicar</button> <button class="btn g s" data-a="arch" data-i="'+p.id+'">'+(p.arch?'Repor':'Arquivar')+'</button> <button class="btn d s" data-a="del" data-i="'+p.id+'">Apagar</button></td></tr>'}).join(''):'<tr><td colspan="5" class="empty">Sem projetos.</td></tr>';
@@ -278,6 +922,188 @@ function bindSvg(){var sv=$('sv'),pts={},mode=null,last=null,pd=0;
  function up(e){delete pts[e.pointerId];if(!Object.keys(pts).length)mode=null;else if(mode==='pinch'){mode='pan';var k=Object.keys(pts);last=pts[k[0]]}}
  sv.addEventListener('pointerup',up);sv.addEventListener('pointercancel',up);
  window.addEventListener('resize',function(){if($('sv'))draw()})}
+
+/* ================= Fases 3–4: módulos 04 a 07 (interface; os cálculos vêm do motor E) ================= */
+var LIBK='ir_pivot_lib',LIB={emit:[],bombas:[]};
+try{var _l=JSON.parse(localStorage.getItem(LIBK)||'null');if(_l){LIB.emit=_l.emit||[];LIB.bombas=_l.bombas||[]}}catch(e){}
+function saveLib(){try{localStorage.setItem(LIBK,JSON.stringify(LIB))}catch(e){}}
+function pget(o,path){return path.split('.').reduce(function(a,k){return a==null?a:a[k]},o)}
+function pset(o,path,v){var ks=path.split('.'),last=ks.pop(),t=ks.reduce(function(a,k){return a[k]},o);t[last]=v}
+function fp(label,path,type,ph,extra){var v=pget(P(),path);return '<label>'+label+'<input data-p="'+path+'" type="'+(type||'text')+'"'+(type==='number'?' step="any" inputmode="decimal"':'')+' value="'+esc(v)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+(extra||'')+'></label>'}
+function sp(label,path,opts,num){var v=pget(P(),path);return '<label>'+label+'<select data-p="'+path+'"'+(num?' data-num="1"':'')+'>'+opts.map(function(o){var val=Array.isArray(o)?o[0]:o,tx=Array.isArray(o)?o[1]:o;return '<option value="'+esc(val)+'"'+(String(v)===String(val)?' selected':'')+'>'+esc(tx)+'</option>'}).join('')+'</select></label>'}
+function bindP(root,cb){[].forEach.call(root.querySelectorAll('[data-p]'),function(e){var h=function(){var p=P(),path=e.dataset.p;pset(p,path,e.dataset.num?Number(e.value):e.value);save();cb&&cb(path)};e.addEventListener('input',h);e.addEventListener('change',h)})}
+function pill(e,t){var c={ok:'ok',info:'i',aviso:'w',erro:'b'}[e]||'i';return '<span class="pill '+c+'">'+t+'</span>'}
+function alHtml(l){return l.map(function(a){return '<div class="al '+a.nivel+'">'+a.texto+'</div>'}).join('')}
+function kpi(l,v,u,dim){return '<div class="kpi'+(dim?' dim':'')+'"><small>'+l+'</small><b>'+v+(u?' <em>'+u+'</em>':'')+'</b></div>'}
+function trows(rows){return '<table><tbody>'+rows.map(function(r){return '<tr><td>'+r[0]+'</td><td class="n"><b>'+r[1]+'</b>'+(r[2]?' <span class="hint">'+r[2]+'</span>':'')+'</td></tr>'}).join('')+'</tbody></table>'}
+function fm(v,d){return f(v,d)}
+
+/* gráfico de linhas em SVG */
+function gLine(series,marks,xl,yl,h){h=h||240;var W=640,ml=48,mr=14,mt=16,mb=34,xs=[],ys=[];series.forEach(function(s){xs=xs.concat(s.x);ys=ys.concat(s.y)});(marks||[]).forEach(function(m){xs.push(m.x);ys.push(m.y)});
+ if(!xs.length)return '<p class="hint">Sem dados para o gráfico.</p>';
+ var x0=Math.min.apply(null,[0].concat(xs)),x1=Math.max.apply(null,xs)||1,y0=Math.min.apply(null,[0].concat(ys)),y1=(Math.max.apply(null,ys)||1)*1.08;
+ var X=function(v){return ml+(v-x0)/(x1-x0||1)*(W-ml-mr)},Y=function(v){return mt+(1-(v-y0)/(y1-y0||1))*(h-mt-mb)},o='';
+ [0,.25,.5,.75,1].forEach(function(t){var yy=mt+t*(h-mt-mb);o+='<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+yy+'" y2="'+yy+'" stroke="#e3ebf3"/><text x="'+(ml-6)+'" y="'+(yy+4)+'" text-anchor="end" font-size="10" fill="#5d7389">'+(y1-t*(y1-y0)).toFixed(y1>20?0:1)+'</text><text x="'+(ml+t*(W-ml-mr))+'" y="'+(h-16)+'" text-anchor="middle" font-size="10" fill="#5d7389">'+(x0+t*(x1-x0)).toFixed(x1>20?0:1)+'</text>'});
+ series.forEach(function(s){o+='<path d="'+s.x.map(function(v,i){return (i?'L':'M')+X(v).toFixed(1)+' '+Y(s.y[i]).toFixed(1)}).join(' ')+'" fill="none" stroke="'+s.cor+'" stroke-width="2.2"'+(s.dash?' stroke-dasharray="5 3"':'')+'/>'});
+ (marks||[]).forEach(function(m){o+='<circle cx="'+X(m.x)+'" cy="'+Y(m.y)+'" r="5.5" fill="'+m.cor+'" stroke="#fff" stroke-width="2"/>'+(m.nome?'<text x="'+(X(m.x)+8)+'" y="'+(Y(m.y)-8)+'" font-size="10" fill="'+m.cor+'">'+esc(m.nome)+'</text>':'')});
+ o+='<text x="'+W/2+'" y="'+(h-2)+'" text-anchor="middle" font-size="10" fill="#5d7389">'+xl+'</text><text x="10" y="10" font-size="10" fill="#5d7389">'+yl+'</text>';
+ var lg=series.map(function(s){return '<span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px"><i style="display:inline-block;width:16px;height:2px;background:'+s.cor+'"></i>'+esc(s.nome)+'</span>'}).join('');
+ return '<svg viewBox="0 0 '+W+' '+h+'" style="width:100%;display:block" role="img" aria-label="'+yl+' em função de '+xl+'">'+o+'</svg><div class="hint">'+lg+'</div>'}
+
+function pipe(p){var geo=E.calcGeo(p.geo),awc=({Arenoso:80,Franco:150,Argiloso:180})[p.par.soil]||null,ag=E.calcAgro(p.agro,geo.As,awc),q=E.caudalSistema(ag.nbruta,geo.As,E.num(p.hid.horas)),hid=E.calcHid(p.hid,q);return{geo:geo,ag:ag,q:q,hid:hid,awc:awc}}
+
+/* ---------- 04 Agronómico ---------- */
+function vAgro(x){var p=P(),a=p.agro;
+ x.innerHTML='<div class="card"><h1>Dimensionamento agronómico</h1><p class="sub">Necessidades hídricas da cultura · Projeto: <b>'+esc(p.name)+'</b> · Área irrigada: <b id="agA"></b></p><div class="kpis" id="agk"></div></div>'+
+ '<div class="split2"><div><div class="card"><h2>Dados de entrada</h2><div class="grid g2">'+
+ sp('Cultura','agro.crop',Object.keys(E.CULTURAS))+fp('Variedade','agro.variety')+fp('Data de sementeira / plantação','agro.plantDate','date')+
+ sp('Fase usada no dimensionamento','agro.fase',a.fases.map(function(fa,i){return [i,fa.n+(i===2?' (pico)':'')]}),1)+
+ fp('ET0 de projeto (mm/dia)','agro.et0','number')+fp('ET0 média do ciclo (mm/dia)','agro.et0m','number','igual à de projeto')+
+ fp('Precipitação efetiva (mm/dia)','agro.pe','number')+fp('Eficiência de aplicação (%)','agro.ef','number')+
+ fp('Profundidade radicular (m)','agro.zr','number')+fp('Água disponível no solo (mm/m)','agro.awc','number','típico: '+(({Arenoso:80,Franco:150,Argiloso:180})[p.par.soil]||''))+
+ fp('Fração de esgotamento permitida (0–1)','agro.p','number')+'</div></div>'+
+ '<div class="card"><h2>Fases de desenvolvimento</h2><div class="tw"><table><thead><tr><th>Fase</th><th class="n">Duração (dias)</th><th class="n">Kc</th><th class="n">Kc médio da fase</th></tr></thead><tbody id="agf"></tbody></table></div><p class="hint">Valores de Kc de referência (tipo FAO-56), editáveis. No Kc da fase final indique o valor no fim do ciclo.</p></div></div>'+
+ '<div><div class="card"><h2>Curva de necessidades ao longo do ciclo</h2><div id="agc"></div></div><div class="card"><h2>Resultados</h2><div class="tw" id="agr"></div><p class="hint">Fórmulas: ETc = ET0 × Kc · Nliq = ETc − Pe · Nbruta = Nliq ÷ Ef · m³ = mm × ha × 10 · RAW = awc × Zr × p. A necessidade sazonal usa a ET0 média do ciclo e a Pe diária constante.</p></div><div class="card"><h2>Alertas e validações</h2><div id="aga"></div></div></div></div>';
+ $('agf').innerHTML=a.fases.map(function(fa,i){return '<tr id="agfr'+i+'"><td>'+fa.n+'</td><td class="n"><input type="number" inputmode="decimal" data-p="agro.fases.'+i+'.d" value="'+esc(fa.d)+'"></td><td class="n">'+(i===1?'<span class="hint">interpolado</span>':'<input type="number" step="any" inputmode="decimal" data-p="agro.fases.'+i+'.kc" value="'+esc(fa.kc)+'">')+'</td><td class="n" id="agkc'+i+'"></td></tr>'}).join('');
+ bindP(x,function(path){if(path==='agro.crop'){var d=E.CULTURAS[a.crop];a.zr=d.zr;a.fases=d.fases.map(function(z){return Object.assign({},z)});save();vAgro(x);return}agUp()});agUp()}
+function agUp(){var p=P(),a=p.agro,q=pipe(p),r=q.ag,area=q.geo.As;if(!$('agk'))return;
+ $('agA').textContent=f(area,2)+' ha';
+ $('agk').innerHTML=kpi('ETc de projeto',f(r.etc,2),'mm/dia')+kpi('Necessidade líquida',f(r.nliq,2),'mm/dia')+kpi('Necessidade bruta',f(r.nbruta,2),'mm/dia')+kpi('Volume diário',f(r.m3dia,0),'m³/dia');
+ for(var i=0;i<4;i++){var c=$('agkc'+i),tr=$('agfr'+i);if(c)c.textContent=f(E.kcFase(a.fases,i),2);if(tr)tr.className=i===Number(a.fase)?'sel':''}
+ var fd=a.fases.map(function(z){return Math.round(E.num(z.d)||0)}),et=E.num(a.et0m)!==null?E.num(a.et0m):E.num(a.et0);
+ $('agc').innerHTML=curvaSvg(r.curva,et,fd,Number(a.fase));
+ $('agr').innerHTML=trows([['Kc da fase selecionada',f(r.kc,2),''],['ETc = ET0 × Kc',f(r.etc,2),'mm/dia'],['Necessidade líquida = ETc − Pe',f(r.nliq,2),'mm/dia'],['Necessidade bruta = Nliq ÷ eficiência',f(r.nbruta,2),'mm/dia'],['Necessidade bruta semanal',f(r.semanal,1),'mm/semana'],['Volume diário',f(r.m3dia,0),'m³/dia'],['Volume semanal',f(r.m3semana,0),'m³/semana'],['Necessidade sazonal ('+r.ciclo+' dias)',f(r.sazMm,0),'mm'],['Volume sazonal',f(r.sazM3,0),'m³'],['Reserva total do solo (TAW)',f(r.taw,0),'mm'],['Reserva facilmente utilizável (RAW)',f(r.raw,0),'mm'],['Intervalo máximo entre regas',f(r.intervalo,1),'dias']]);
+ var al=[],ef=E.num(a.ef)||0,pp=E.num(a.p)||0;
+ if(E.num(a.et0)===null)al.push({nivel:'i',texto:'Informação em falta: ET0 de projeto.'});
+ if(!(area>0))al.push({nivel:'i',texto:'Informação em falta: área irrigada (complete o módulo 03).'});
+ if(ef<=0||ef>100)al.push({nivel:'b',texto:'A eficiência de aplicação tem de estar entre 0 e 100 %.'});else if(ef>95)al.push({nivel:'w',texto:'Eficiência de aplicação superior a 95 %: valor pouco realista para aspersão.'});
+ if(pp<=0||pp>1)al.push({nivel:'b',texto:'A fração de esgotamento permitida tem de estar entre 0 e 1.'});
+ if(r.etc!==null&&r.nliq===0)al.push({nivel:'i',texto:'A precipitação efetiva cobre a evapotranspiração: sem necessidade líquida de rega.'});
+ if(r.nbruta!==null&&r.nbruta>12)al.push({nivel:'w',texto:'Necessidade bruta superior a 12 mm/dia: confirmar ET0, Kc e eficiência.'});
+ if(r.intervalo!==null&&r.intervalo<2)al.push({nivel:'w',texto:'Intervalo máximo entre regas de apenas '+f(r.intervalo,1)+' dias: solo de baixa retenção ou raízes curtas; exige regas frequentes.'});
+ if(r.taw===null)al.push({nivel:'i',texto:'Informação em falta: água disponível no solo (mm/m) ou tipo de solo no módulo 02.'});else if(!E.num(a.awc))al.push({nivel:'i',texto:'Usado um valor típico de '+q.awc+' mm/m para solo '+p.par.soil.toLowerCase()+'. Confirme com análise do solo.'});
+ if(!al.some(function(z){return z.nivel==='b'||z.nivel==='w'}))al.push({nivel:'ok',texto:'Parâmetros agronómicos coerentes com os critérios definidos. Os valores de Kc são de referência e devem ser ajustados à cultura e região.'});
+ $('aga').innerHTML=alHtml(al)}
+function curvaSvg(curva,et0,fases,atual){var W=640,H=220,ml=44,mr=44,mt=14,mb=30;if(!curva.length)return '<p class="hint">Indique a duração das fases para ver a curva.</p>';
+ var kmax=Math.max.apply(null,[1.4].concat(curva))*1.05,n=curva.length,x=function(i){return ml+i/Math.max(1,n-1)*(W-ml-mr)},yk=function(k){return mt+(1-k/kmax)*(H-mt-mb)},etm=et0?kmax*et0:null,ye=function(e){return mt+(1-e/etm)*(H-mt-mb)},o='';
+ [0,.25,.5,.75,1].forEach(function(t){var yy=mt+t*(H-mt-mb);o+='<line x1="'+ml+'" x2="'+(W-mr)+'" y1="'+yy+'" y2="'+yy+'" stroke="#e3ebf3"/><text x="'+(ml-6)+'" y="'+(yy+4)+'" text-anchor="end" font-size="10" fill="#5d7389">'+(kmax*(1-t)).toFixed(1)+'</text>'+(etm?'<text x="'+(W-mr+6)+'" y="'+(yy+4)+'" font-size="10" fill="#d98a00">'+(etm*(1-t)).toFixed(0)+'</text>':'')});
+ var acc=0,nm=['Inicial','Desenv.','Intermédia','Final'];fases.forEach(function(d,k){var i0=acc;acc+=d;if(d>0){var xa=x(i0),xb=x(Math.min(n-1,acc));o+='<rect x="'+xa+'" y="'+mt+'" width="'+Math.max(0,xb-xa)+'" height="'+(H-mt-mb)+'" fill="'+(k===atual?'#36A9D6':'transparent')+'" fill-opacity=".14"/><text x="'+(xa+xb)/2+'" y="'+(H-12)+'" text-anchor="middle" font-size="10" fill="#5d7389">'+nm[k]+'</text>'}});
+ o+='<path d="'+curva.map(function(k,i){return (i?'L':'M')+x(i).toFixed(1)+' '+yk(k).toFixed(1)}).join(' ')+'" fill="none" stroke="#1677C8" stroke-width="2.4"/>';
+ if(etm)o+='<path d="'+curva.map(function(k,i){return (i?'L':'M')+x(i).toFixed(1)+' '+ye(k*et0).toFixed(1)}).join(' ')+'" fill="none" stroke="#d98a00" stroke-width="2" stroke-dasharray="5 3"/><text x="'+(W-mr+6)+'" y="10" font-size="10" fill="#d98a00">ETc (mm/dia)</text>';
+ o+='<text x="'+ml+'" y="10" font-size="10" fill="#1677C8">Kc</text><text x="'+W/2+'" y="'+(H-1)+'" text-anchor="middle" font-size="10" fill="#5d7389">dias do ciclo ('+n+')</text>';
+ return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block" role="img" aria-label="Curva de Kc e ETc ao longo do ciclo">'+o+'</svg>'}
+
+/* ---------- 05 Hidráulico ---------- */
+function vHid(x){var p=P();
+ x.innerHTML='<div class="card"><h1>Dimensionamento hidráulico</h1><p class="sub">Caudais, tubagens, velocidades e perdas de carga · Projeto: <b>'+esc(p.name)+'</b></p><div class="kpis" id="hk"></div><p class="hint" id="hq" style="margin-top:8px"></p></div>'+
+ '<div class="card"><h2>Parâmetros gerais</h2><div class="grid g4">'+fp('Horas de funcionamento (h/dia)','hid.horas','number')+fp('Caudal manual (m³/h)','hid.qman','number','automático')+fp('Pressão no centro do pivot (bar)','hid.pc','number')+fp('Pressão disponível à entrada (bar)','hid.pdisp','number','opcional')+sp('Fórmula de perdas','hid.method',[['DW','Darcy-Weisbach'],['HW','Hazen-Williams']])+'</div><p class="hint">Darcy-Weisbach: h<sub>f</sub> = f·(L/D)·V²/2g, com f de Swamee-Jain · Hazen-Williams: h<sub>f</sub> = 10,67·L·Q<sup>1,852</sup>/(C<sup>1,852</sup>·D<sup>4,871</sup>) (Q em m³/s). Na conduta do pivot aplica-se o fator de Christiansen.</p></div>'+
+ '<div class="card"><div class="pl" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Troços da rede (da bomba ao pivot)</h2><div class="pl noprint" id="hadd"></div></div><div class="tw"><table><thead><tr><th>Troço</th><th>Material</th><th class="n">DN / Ø int. (mm)</th><th class="n">Comp. (m)</th><th class="n">Desnível (m)</th><th class="n">ΣK</th><th class="n">Saídas</th><th class="n">V (m/s)</th><th class="n">hf (m)</th><th class="n">hl (m)</th><th>Estado</th><th></th></tr></thead><tbody id="hsg"></tbody></table></div><p class="hint">Diâmetros internos: PEAD PE100 (PN10 = SDR17, PN16 = SDR11) calculados; aço com Ø interno ≈ DN (indicativo). Confirme sempre o diâmetro interno com o fabricante ou use "Personalizado". Desnível positivo = a água sobe.</p><div class="tw" id="hsum" style="margin-top:10px"></div></div>'+
+ '<div id="hcmp"></div><div class="card"><h2>Alertas e validações</h2><div id="hal"></div></div>';
+ var kinds=[['asp','Aspiração'],['prin','Principal'],['dist','Distribuição'],['pivot','Pivot']];
+ $('hadd').innerHTML=kinds.map(function(k){return '<button class="btn g s" data-add="'+k[0]+'">+ '+k[1]+'</button>'}).join('');
+ [].forEach.call($('hadd').querySelectorAll('button'),function(b){b.onclick=function(){P().hid.segs.push(E.trocoNovo(b.dataset.add));save();hidRows();hidUp()}});
+ bindP(x,function(){hidUp()});hidRows();hidUp()}
+function hidRows(){var p=P(),h=p.hid,tb=$('hsg');if(!tb)return;
+ tb.innerHTML=h.segs.map(function(t,i){var m=E.MATERIAIS[t.mat],pre='hid.segs.'+i+'.';
+  return '<tr><td><input style="width:150px;text-align:left" data-p="'+pre+'name" value="'+esc(t.name)+'" aria-label="Nome do troço"><div class="hint">'+E.TIPOS[t.kind].nome+'</div></td>'+
+  '<td><select data-mat="'+i+'">'+Object.keys(E.MATERIAIS).map(function(k){return '<option'+(k===t.mat?' selected':'')+'>'+k+'</option>'}).join('')+'</select></td>'+
+  '<td class="n">'+(t.mat==='Personalizado'?'<input type="number" step="any" data-p="'+pre+'idc" value="'+esc(t.idc)+'" placeholder="Ø int.">':'<select data-p="'+pre+'dn">'+m.dns.map(function(d){return '<option'+(String(d)===String(t.dn)?' selected':'')+'>'+d+'</option>'}).join('')+'</select>')+'</td>'+
+  '<td class="n"><input type="number" step="any" data-p="'+pre+'L" value="'+esc(t.L)+'"></td><td class="n"><input style="width:70px" type="number" step="any" data-p="'+pre+'dz" value="'+esc(t.dz)+'"></td><td class="n"><input style="width:60px" type="number" step="any" data-p="'+pre+'k" value="'+esc(t.k)+'"></td>'+
+  '<td class="n">'+(t.kind==='pivot'?'<input style="width:70px" type="number" data-p="'+pre+'nOut" value="'+esc(t.nOut)+'">':'—')+'</td>'+
+  '<td class="n" id="hv'+i+'">—</td><td class="n" id="hf'+i+'">—</td><td class="n" id="hl'+i+'">—</td><td id="he'+i+'"></td>'+
+  '<td class="noprint"><div class="pl" style="gap:4px"><button class="btn g s" data-mv="'+i+'|-1" aria-label="Subir">↑</button><button class="btn g s" data-mv="'+i+'|1" aria-label="Descer">↓</button><button class="btn d s" data-rm="'+i+'" aria-label="Remover">✕</button></div></td></tr>'}).join('')||'<tr><td colspan="12" class="empty">Sem troços. Acrescente um troço acima.</td></tr>';
+ bindP(tb,function(){hidUp()});
+ [].forEach.call(tb.querySelectorAll('[data-mat]'),function(s){s.onchange=function(){var i=+s.dataset.mat,t=h.segs[i],mt=s.value,dns=E.MATERIAIS[mt].dns;t.mat=mt;if(dns.length&&dns.indexOf(Number(t.dn))<0)t.dn=String(dns[Math.min(dns.length-1,4)]);save();hidRows();hidUp()}});
+ [].forEach.call(tb.querySelectorAll('[data-mv]'),function(b){b.onclick=function(){var a=b.dataset.mv.split('|'),i=+a[0],j=i+Number(a[1]);if(j<0||j>=h.segs.length)return;var t=h.segs[i];h.segs[i]=h.segs[j];h.segs[j]=t;save();hidRows();hidUp()}});
+ [].forEach.call(tb.querySelectorAll('[data-rm]'),function(b){b.onclick=function(){h.segs.splice(+b.dataset.rm,1);save();hidRows();hidUp()}})}
+function hidUp(){var p=P(),h=p.hid,q=pipe(p),r=q.hid,area=q.geo.As;if(!$('hk'))return;
+ $('hk').innerHTML=kpi('Caudal de projeto',f(r.Q,1),'m³/h')+kpi('Perda de carga total',f(r.somaHf+r.somaHl,1),'m c.a.')+kpi('Pressão necessária à rede',r.necessariaRede!==null?f(r.necessariaRede/E.BAR_M,2):'—','bar')+kpi('HMT parcial',f(r.hmtParcial,1),'m c.a.');
+ $('hq').textContent=r.origemQ==='manual'?'Caudal indicado manualmente.':r.origemQ==='agronómico'?'Caudal = necessidade bruta × área ÷ horas de funcionamento ('+f(q.ag.nbruta,2)+' mm/dia × '+f(area,2)+' ha × 10 ÷ '+(h.horas||'—')+' h).':'Sem caudal: complete os módulos 03 e 04.';
+ r.trocos.forEach(function(rt,i){var pr=rt.p;$('hv'+i).textContent=pr?f(pr.V,2):'—';$('hf'+i).textContent=pr?f(pr.hf,2):'—';$('hl'+i).textContent=pr?f(pr.hl,2):'—';$('he'+i).innerHTML=rt.estado?pill(rt.estado.e,rt.estado.txt):''});
+ $('hsum').innerHTML=trows([['Perda de carga contínua total',f(r.somaHf,2)+' m c.a.'],['Perdas localizadas totais',f(r.somaHl,2)+' m c.a.'],['Desnível total',f(r.somaDz,1)+' m'],['Pressão no centro do pivot',f(r.pcM,1)+' m c.a.'],['HMT parcial (sem perdas na bomba e nível dinâmico)',r.hmtParcial!==null?f(r.hmtParcial,1)+' m c.a. ('+f(r.hmtParcial/E.BAR_M,2)+' bar)':'—']].concat(r.margem!==null?[['Margem de pressão disponível',f(r.margem,1)+' m c.a.']]:[]));
+ var cm='';h.segs.forEach(function(t,si){if(!E.MATERIAIS[t.mat].dns.length||r.Q===null)return;var cand=E.comparar(t,r.Q,h.method),L=E.num(t.L);
+  cm+='<div class="card"><h2>Comparador de diâmetros · '+esc(t.name)+'</h2><div class="tw"><table><thead><tr><th>DN</th><th class="n">Ø int. (mm)</th><th class="n">V (m/s)</th><th class="n">hf (m)</th><th class="n">hf (m/100 m)</th><th>Estado</th><th class="n">Preço (€/m)</th><th class="n">Custo (€)</th></tr></thead><tbody>'+
+  cand.map(function(c){return '<tr class="'+(c.selecionado?'sel':'')+'"><td><b>'+c.dn+'</b>'+(c.selecionado?' <span class="hint">selecionado</span>':'')+'</td><td class="n">'+f(c.id,1)+'</td><td class="n">'+f(c.V,2)+'</td><td class="n">'+f(c.hf,2)+'</td><td class="n">'+f(L?c.hf/L*100:null,2)+'</td><td>'+pill(c.estado.e,c.estado.txt)+'</td><td class="n"><input type="number" step="any" data-pr="'+si+'|'+c.dn+'" value="'+esc(t.prices[String(c.dn)]||'')+'" aria-label="Preço DN '+c.dn+'"></td><td class="n" id="cc'+si+'_'+c.dn+'">'+(c.custo!==null?f(c.custo,0):'—')+'</td></tr>'}).join('')+'</tbody></table></div><p class="hint">O comparador mostra as alternativas e os custos que indicar; não escolhe automaticamente o mais barato. A escolha deve respeitar velocidade, pressão nominal e critérios de projeto.</p></div>'});
+ $('hcmp').innerHTML=cm;
+ [].forEach.call($('hcmp').querySelectorAll('[data-pr]'),function(inp){inp.oninput=function(){var a=inp.dataset.pr.split('|'),t=P().hid.segs[+a[0]];t.prices[a[1]]=inp.value;save();var pr=E.num(inp.value),L=E.num(t.L);$('cc'+a[0]+'_'+a[1]).textContent=pr!==null&&L!==null?f(pr*L,0):'—'}});
+ $('hal').innerHTML=alHtml(r.alertas)}
+
+/* ---------- 06 Emissores ---------- */
+function vEmit(x){var p=P();
+ x.innerHTML='<div class="card"><h1>Aspersores e emissores</h1><p class="sub">Distribuição de caudal e pressão ao longo do pivot · Projeto: <b>'+esc(p.name)+'</b></p><div class="kpis" id="ek"></div></div>'+
+ '<div class="split"><div><div class="card"><h2>Emissor e biblioteca</h2><label>Modelo da biblioteca<select id="elib"></select></label><div class="grid g2" style="margin-top:10px">'+
+ sp('Tipo de emissor','emit.tipo',E.TIPOS_EMISSOR)+fp('Fabricante','emit.fab')+fp('Modelo','emit.modelo')+fp('Diâmetro do bocal','emit.bocal','text','ex.: 4,5 mm')+fp('Pressão de referência (bar)','emit.p','number')+fp('Caudal à pressão de ref. (L/h)','emit.q','number')+fp('Diâmetro molhado (m)','emit.wd','number')+fp('Espaçamento (m)','emit.s','number')+fp('Altura de instalação (m)','emit.h','number')+fp('Regulador de pressão (bar)','emit.reg','number','sem regulador')+fp('Caudal do canhão (m³/h)','emit.Qg','number')+
+ '</div><div class="pl noprint" style="margin-top:10px"><button class="btn s" id="esv">Guardar na biblioteca</button><button class="btn d s" id="edl">Apagar modelo</button></div><p class="hint">A biblioteca é partilhada por todos os projetos e fica guardada neste navegador. Introduza os dados do catálogo do fabricante; a aplicação não traz valores de fabricantes.</p></div>'+
+ '<div class="card"><h2>Critérios</h2><p class="hint" style="line-height:1.7">Caudal do emissor i: q<sub>i</sub> = Q<sub>emissores</sub> · r<sub>i</sub> ÷ Σr (aplicação uniforme em mm)<br>Pressão: p<sub>i</sub> = p<sub>centro</sub> − h<sub>f</sub>(r<sub>i</sub>), com Darcy-Weisbach e caudal decrescente<br>Caudal de catálogo necessário: q<sub>cat</sub> = q<sub>i</sub> · √(p<sub>ref</sub> ÷ p<sub>i</sub>)<br>Taxa de pico (padrão elíptico): I = (4/π) · q ÷ (π·D<sub>m</sub>²/4)</p></div></div>'+
+ '<div><div class="card"><h2>Distribuição ao longo do pivot</h2><div id="ec1"></div><div id="ec2" style="margin-top:12px"></div></div><div class="card"><h2>Tabela de emissores</h2><div class="tw" style="max-height:420px;overflow:auto" id="et"></div><p class="hint" id="en"></p></div><div class="card"><h2>Alertas e validações</h2><div id="eal"></div></div></div></div>';
+ fillLib();
+ $('elib').onchange=function(){var m=LIB.emit.filter(function(z){return z.id===$('elib').value})[0],e=P().emit;if(!m){e.libId='';save();return}e.libId=m.id;['tipo','fab','modelo','bocal','p','q','wd','s','h','reg'].forEach(function(k){e[k]=m[k]});save();vEmit(x)};
+ $('esv').onclick=function(){var e=P().emit;if(!String(e.modelo).trim()){alert('Indique o modelo antes de guardar na biblioteca.');return}var m={id:e.libId||E.uid(),tipo:e.tipo,fab:e.fab,modelo:e.modelo,bocal:e.bocal,p:e.p,q:e.q,wd:e.wd,s:e.s,h:e.h,reg:e.reg},i=LIB.emit.map(function(z){return z.id}).indexOf(m.id);if(i>=0)LIB.emit[i]=m;else LIB.emit.push(m);e.libId=m.id;saveLib();save();fillLib()};
+ $('edl').onclick=function(){var e=P().emit;if(!e.libId||!confirm('Apagar este modelo da biblioteca?'))return;LIB.emit=LIB.emit.filter(function(z){return z.id!==e.libId});e.libId='';saveLib();save();fillLib()};
+ bindP(x,function(){emUp()});emUp()}
+function fillLib(){var s=$('elib'),e=P().emit;if(!s)return;s.innerHTML='<option value="">— a introduzir manualmente —</option>'+LIB.emit.map(function(m){return '<option value="'+esc(m.id)+'"'+(m.id===e.libId?' selected':'')+'>'+esc(m.tipo+' · '+m.fab+' '+m.modelo+(m.bocal?' ('+m.bocal+')':''))+'</option>'}).join('')}
+function emUp(){var p=P(),e=p.emit,q=pipe(p),g=q.geo,piv=null;p.hid.segs.forEach(function(t){if(t.kind==='pivot'&&!piv)piv=t});
+ var D=piv?E.diametroInterno(piv):null,eps=piv?(piv.mat==='Personalizado'?0.05:E.MATERIAIS[piv.mat].eps):0.15;
+ var r=E.calcEmit(e,g.L,q.hid.Q,D,q.hid.pcM,eps,E.num(p.par.inf));if(!$('ek'))return;
+ $('ek').innerHTML=kpi('Nº de emissores',r.ok?String(r.N):'—')+kpi('Caudal por emissor',r.ok?f(r.qMin,0)+'–'+f(r.qMax,0):'—','L/h')+kpi('Pressão (centro → ponta)',r.ok?f(r.pMax,2)+'–'+f(r.pMin,2):'—','bar')+kpi('Taxa de pico',f(r.imax,0),'mm/h',r.imax===null);
+ var ps=r.pontos;
+ if(r.ok){$('ec1').innerHTML=gLine([{nome:'Caudal de projeto (L/h)',cor:'#1677C8',x:ps.map(function(z){return z.r}),y:ps.map(function(z){return z.qDes})}],[],'distância ao centro (m)','caudal por emissor (L/h)');
+  var rg=E.num(e.reg),se=[{nome:'Pressão disponível (bar)',cor:'#d98a00',x:ps.map(function(z){return z.r}),y:ps.map(function(z){return z.pBar})}];if(rg)se.push({nome:'Regulador (bar)',cor:'#1d9a5b',dash:1,x:[ps[0].r,ps[ps.length-1].r],y:[rg,rg]});
+  $('ec2').innerHTML=gLine(se,[],'distância ao centro (m)','pressão (bar)',200);
+  var step=Math.max(1,Math.floor(ps.length/40)),am=ps.filter(function(z,i){return i%step===0||i===ps.length-1});
+  $('et').innerHTML='<table><thead><tr><th class="n">Nº</th><th class="n">r (m)</th><th class="n">q projeto (L/h)</th><th class="n">Caudal acum. (m³/h)</th><th class="n">p (bar)</th><th class="n">q catálogo nec. (L/h)</th></tr></thead><tbody>'+am.map(function(z){return '<tr><td class="n">'+z.i+'</td><td class="n">'+f(z.r,1)+'</td><td class="n">'+f(z.qDes,0)+'</td><td class="n">'+f(z.acum,1)+'</td><td class="n">'+f(z.pOp,2)+'</td><td class="n">'+f(z.qCat,0)+'</td></tr>'}).join('')+'</tbody></table>';
+  $('en').textContent=step>1?'Mostrado 1 em cada '+step+' emissores (total '+r.N+').':''}
+ else{$('ec1').innerHTML='<p class="hint">'+esc(r.alertas[0]?r.alertas[0].texto:'')+'</p>';$('ec2').innerHTML='';$('et').innerHTML='<p class="hint">Complete os dados para ver a tabela.</p>';$('en').textContent=''}
+ $('eal').innerHTML=alHtml(r.alertas)}
+
+/* ---------- 07 Bombagem ---------- */
+var BCOR=['#1677C8','#1d9a5b','#8b5cf6','#e0527a','#0f9d9d','#a16207'];
+function vBomb(x){var p=P();
+ x.innerHTML='<div class="card"><h1>Bombagem e energia</h1><p class="sub">HMT, potência, consumo e escolha da bomba · Projeto: <b>'+esc(p.name)+'</b></p><div class="kpis" id="bk"></div></div>'+
+ '<div class="split2"><div><div class="card"><h2>Dados de entrada</h2><div class="grid g2">'+fp('Cota da captação (m)','bomb.cotaCapt','number')+fp('Cota do centro do pivot (m)','bomb.cotaPivot','number')+fp('Nível dinâmico abaixo da captação (m)','bomb.nivDin','number')+fp('Margem de segurança na HMT (%)','bomb.margemH','number')+fp('Rendimento da bomba (%)','bomb.etaB','number')+fp('Rendimento do motor (%)','bomb.etaM','number')+fp('Margem na potência do motor (%)','bomb.margemM','number')+fp('Preço da energia (€/kWh)','bomb.tarifa','number')+'</div><p class="hint" id="bsrc"></p></div><div class="card"><h2>Resultados</h2><div class="tw" id="br"></div></div></div>'+
+ '<div><div class="card"><h2>Curvas características e ponto de funcionamento</h2><div id="bg"></div><p class="hint">Curva do sistema = altura estática + perdas (contínuas ∝ Q<sup>1,852</sup>, localizadas ∝ Q²) + margem. Os pontos coloridos são as interseções com cada bomba.</p></div><div class="card"><h2>Alertas e validações</h2><div id="bal"></div></div></div></div>'+
+ '<div class="card"><div class="pl" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Biblioteca de bombas e comparação</h2><button class="btn s noprint" id="bnw">+ Nova bomba</button></div><div class="tw" id="bcmp"></div><div id="bed"></div></div>';
+ $('bnw').onclick=function(){var m={id:E.uid(),fab:'',modelo:'Nova bomba',tipo:'Centrífuga',motorKw:'',pontos:[{q:'',h:'',eta:''},{q:'',h:'',eta:''},{q:'',h:'',eta:''},{q:'',h:'',eta:''}]};LIB.bombas.push(m);P().bomb.bombaSel=m.id;saveLib();save();bEd();bUp()};
+ bindP(x,function(){bUp()});bEd();bUp()}
+function bEd(){var b=P().bomb,s=LIB.bombas.filter(function(m){return m.id===b.bombaSel})[0],el=$('bed');if(!el)return;if(!s){el.innerHTML='';return}
+ el.innerHTML='<div style="border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:14px"><div class="grid g4"><label>Fabricante<input data-b="fab" value="'+esc(s.fab)+'"></label><label>Modelo<input data-b="modelo" value="'+esc(s.modelo)+'"></label><label>Tipo<input data-b="tipo" value="'+esc(s.tipo)+'"></label><label>Motor (kW)<input type="number" step="any" data-b="motorKw" value="'+esc(s.motorKw)+'"></label></div><h3 class="s">Pontos da curva (do fabricante)</h3><div class="tw"><table><thead><tr><th>Q (m³/h)</th><th>H (m)</th><th>η (%)</th><th></th></tr></thead><tbody>'+
+ s.pontos.map(function(pt,i){return '<tr>'+['q','h','eta'].map(function(k){return '<td><input type="number" step="any" inputmode="decimal" data-bp="'+i+'|'+k+'" value="'+esc(pt[k])+'" aria-label="'+k+' ponto '+(i+1)+'"></td>'}).join('')+'<td><button class="btn d s" data-bx="'+i+'" aria-label="Remover ponto">✕</button></td></tr>'}).join('')+'</tbody></table></div><div class="pl" style="margin-top:8px"><button class="btn g s" id="bpa">+ Ponto</button><button class="btn d s" id="bdl">Apagar bomba</button><button class="btn g s" id="bcl">Fechar</button></div><p class="hint">Indique pelo menos 2 pontos (caudal, altura e rendimento) lidos da curva do fabricante. A interpolação entre pontos é linear. A comparação usa a curva da bomba, não só a potência nominal.</p></div>';
+ [].forEach.call(el.querySelectorAll('[data-b]'),function(i){i.oninput=function(){s[i.dataset.b]=i.value;saveLib();bUp()}});
+ [].forEach.call(el.querySelectorAll('[data-bp]'),function(i){i.oninput=function(){var a=i.dataset.bp.split('|');s.pontos[+a[0]][a[1]]=i.value;saveLib();bUp()}});
+ [].forEach.call(el.querySelectorAll('[data-bx]'),function(i){i.onclick=function(){s.pontos.splice(+i.dataset.bx,1);saveLib();bEd();bUp()}});
+ $('bpa').onclick=function(){s.pontos.push({q:'',h:'',eta:''});saveLib();bEd()};
+ $('bdl').onclick=function(){if(!confirm('Apagar a bomba "'+s.modelo+'" da biblioteca?'))return;LIB.bombas=LIB.bombas.filter(function(m){return m.id!==s.id});b.bombaSel='';saveLib();save();bEd();bUp()};
+ $('bcl').onclick=function(){b.bombaSel='';save();bEd();bUp()}}
+function bUp(){var p=P(),b=p.bomb,q=pipe(p),r=q.hid,Q=r.Q,geo=q.geo,ag=q.ag;if(!$('bk'))return;
+ var perdas=r.somaHf+r.somaHl,hmt=E.calcHmt(b,r.pcM,perdas),etaB=E.num(b.etaB)||0,etaM=E.num(b.etaM)||0,mH=E.num(b.margemH)||0;
+ var pot=Q!==null&&Q>0?E.calcPotencias(Q,hmt.total,etaB,etaM,E.num(b.margemM)||0):null,tar=E.num(b.tarifa),hr=E.num(p.hid.horas);
+ var kwhM3=pot&&Q?pot.Pel/Q:null,cH=pot&&tar!==null?pot.Pel*tar:null,cD=cH!==null&&hr?cH*hr:null,cHa=cD!==null&&geo.As>0?cD/geo.As:null,saz=ag.sazM3,cS=kwhM3!==null&&tar!==null&&saz!==null?kwhM3*saz*tar:null,kS=kwhM3!==null&&saz!==null?kwhM3*saz:null;
+ $('bk').innerHTML=kpi('Caudal',f(Q,1),'m³/h')+kpi('HMT total',Q?f(hmt.total,1):'—','m c.a.')+kpi('Potência absorvida',f(pot?pot.Pa:null,1),'kW')+kpi('Motor a selecionar',pot&&pot.motor?f(pot.motor,pot.motor<10?1:0):'—','kW');
+ $('bsrc').textContent='Caudal e perdas vêm do módulo 05 (caudal '+f(Q,1)+' m³/h, perdas '+f(perdas,2)+' m c.a., pressão no centro '+f(r.pcM/E.BAR_M,2)+' bar).';
+ $('br').innerHTML=trows([['Altura estática (cotas + nível dinâmico)',f(hmt.estatica,1)+' m'],['Pressão no centro do pivot',f(hmt.pc,1)+' m'],['Perdas de carga (módulo 05)',f(hmt.perdas,1)+' m'],['Margem de segurança ('+(b.margemH||0)+' %)',f(hmt.margem,1)+' m'],['Altura manométrica total (HMT)',Q?f(hmt.total,1)+' m c.a.':'—'],['Potência hidráulica = Q·H ÷ 367,2',pot?f(pot.Ph,1)+' kW':'—'],['Potência absorvida = Ph ÷ η bomba',pot?f(pot.Pa,1)+' kW':'—'],['Potência do motor (+'+(b.margemM||0)+' %)',pot&&pot.Pm?f(pot.Pm,1)+' kW':'—'],['Motor comercial seguinte',pot&&pot.motor?f(pot.motor,1)+' kW':'—'],['Potência elétrica consumida',pot?f(pot.Pel,1)+' kW':'—'],['Energia específica',kwhM3!==null?f(kwhM3,3)+' kWh/m³':'—'],['Custo por hora de funcionamento',cH!==null?f(cH,2)+' €/h':'—'],['Custo por dia de rega',cD!==null?f(cD,2)+' €/dia':'—'],['Custo por hectare e por dia',cHa!==null?f(cHa,2)+' €/ha/dia':'—'],['Energia sazonal ('+ag.ciclo+' dias)',kS!==null?f(kS,0)+' kWh':'—'],['Custo sazonal estimado',cS!==null?f(cS,0)+' € ('+(geo.As>0?f(cS/geo.As,0):'—')+' €/ha)':'—']]);
+ var est=hmt.estatica+r.pcM,sel=b.bombaSel,series=[],marks=[];
+ if(Q){var qs=[];for(var i=0;i<=40;i++)qs.push(Q*1.6*i/40);series.push({nome:'Sistema',cor:'#d98a00',dash:1,x:qs,y:qs.map(function(z){return E.alturaSistema(z,Q,est,r.somaHf,r.somaHl,mH)})});marks.push({x:Q,y:hmt.total,cor:'#123B66',nome:'Projeto'})}
+ var comp=LIB.bombas.map(function(m,i){var fu=Q?E.pontoFuncionamento(m,Q,est,r.somaHf,r.somaHl,mH):null,Pel=fu&&fu.Pabs!=null&&etaM>0?fu.Pabs/(etaM/100):null;return{m:m,f:fu,Pel:Pel,cor:BCOR[i%BCOR.length],dQ:fu&&Q?(fu.q-Q)/Q*100:null}});
+ comp.forEach(function(c){var pts=E.pontosValidos(c.m);if(pts.length>=2)series.push({nome:(c.m.fab+' '+c.m.modelo).trim(),cor:c.cor,x:pts.map(function(z){return z.q}),y:pts.map(function(z){return z.h})});if(c.f)marks.push({x:c.f.q,y:c.f.h,cor:c.cor,nome:''})});
+ $('bg').innerHTML=Q?gLine(series,marks,'caudal (m³/h)','altura (m)'):'<p class="hint">Sem caudal de projeto.</p>';
+ $('bcmp').innerHTML='<table><thead><tr><th>Bomba</th><th class="n">Q funcion. (m³/h)</th><th class="n">H (m)</th><th class="n">η (%)</th><th class="n">Potência abs. (kW)</th><th class="n">Motor (kW)</th><th class="n">kWh/m³</th><th class="n">Desvio de caudal</th><th></th></tr></thead><tbody>'+
+  (comp.map(function(c){return '<tr class="'+(c.m.id===sel?'sel':'')+'"><td><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+c.cor+';margin-right:6px"></i><b>'+esc(c.m.fab+' '+c.m.modelo)+'</b></td><td class="n">'+f(c.f?c.f.q:null,1)+'</td><td class="n">'+f(c.f?c.f.h:null,1)+'</td><td class="n">'+f(c.f?c.f.eta:null,0)+'</td><td class="n">'+f(c.f?c.f.Pabs:null,1)+'</td><td class="n">'+(esc(c.m.motorKw)||'—')+'</td><td class="n">'+(c.f&&c.f.q&&c.Pel!==null?f(c.Pel/c.f.q,3):'—')+'</td><td class="n">'+(c.dQ!==null?(c.dQ>0?'+':'')+f(c.dQ,0)+' %':'—')+'</td><td class="noprint"><button class="btn g s" data-ed="'+c.m.id+'">Editar curva</button></td></tr>'}).join('')||'<tr><td colspan="9" class="empty">Sem bombas na biblioteca.</td></tr>')+'</tbody></table>';
+ [].forEach.call($('bcmp').querySelectorAll('[data-ed]'),function(bt){bt.onclick=function(){P().bomb.bombaSel=bt.dataset.ed;save();bEd();bUp()}});
+ var al=[];
+ if(Q===null)al.push({nivel:'i',texto:'Informação em falta: caudal (módulos 03, 04 e 05).'});
+ if(r.hmtParcial===null&&Q!==null)al.push({nivel:'i',texto:'Informação em falta: dados hidráulicos dos troços (módulo 05).'});
+ if(Math.abs(r.somaDz)>0.01&&Math.abs(hmt.estatica)>0.01)al.push({nivel:'w',texto:'Os desníveis dos troços ('+f(r.somaDz,1)+' m, módulo 05) NÃO entram na HMT daqui: aqui conta o desnível das cotas ('+f(hmt.estatica,1)+' m). Confirme que não está a contar a mesma diferença de cota duas vezes.'});
+ if(etaB<=0||etaB>90)al.push({nivel:'w',texto:'Rendimento da bomba fora do intervalo habitual (30–90 %).'});
+ if(pot&&pot.motor===null)al.push({nivel:'w',texto:'Potência acima do maior motor da lista: dimensionar em grupo ou confirmar os dados.'});
+ comp.forEach(function(c){var nm=esc((c.m.fab+' '+c.m.modelo).trim()),mv=!c.f&&Q?E.motivoSemPonto(c.m,Q,est,r.somaHf,r.somaHl,mH):null;
+  if(mv==='excede')al.push({nivel:'i',texto:nm+': a curva fica acima da curva do sistema em todo o intervalo (bomba sobredimensionada ou curva incompleta): o ponto de funcionamento estaria além do último ponto da curva. Estrangular ou escolher uma bomba menor.'});
+  else if(mv==='insuficiente')al.push({nivel:'b',texto:nm+': altura insuficiente, a curva fica abaixo da curva do sistema em todo o intervalo.'});
+  else if(!c.f&&E.pontosValidos(c.m).length>=2)al.push({nivel:'w',texto:nm+': não foi encontrado ponto de funcionamento.'});
+  else if(c.dQ!==null&&c.dQ<-5)al.push({nivel:'w',texto:nm+': caudal de funcionamento '+f(c.f.q,0)+' m³/h, '+f(Math.abs(c.dQ),0)+' % abaixo do caudal de projeto.'});
+  if(c.f&&c.f.eta!=null&&c.f.eta<55)al.push({nivel:'w',texto:nm+': funciona com rendimento de '+f(c.f.eta,0)+' %, longe do ponto ótimo.'})});
+ if(!LIB.bombas.length)al.push({nivel:'i',texto:'Biblioteca de bombas vazia: acrescente bombas com os pontos da curva do fabricante para as comparar.'});
+ if(!al.some(function(z){return z.nivel==='b'||z.nivel==='w'}))al.push({nivel:'ok',texto:'Dimensionamento de bombagem coerente com os critérios definidos. Resultado calculado: não substitui a validação técnica do projeto.'});
+ $('bal').innerHTML=alHtml(al)}
 
 load();side();render();save();
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js').catch(function(){});
