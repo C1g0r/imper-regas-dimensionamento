@@ -1,7 +1,7 @@
 // Guarda a app no telemóvel/computador para funcionar sem internet.
 // Ao publicar uma nova versão, aumente o número em CACHE.
-const CACHE = 'imper-regas-v9';
-const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const CACHE = 'imper-regas-v10';
+const FILES = ['./', './index.html', './pivot.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
