@@ -13,6 +13,9 @@ import { Agronomia } from './modules/Agronomia'
 import { Hidraulica } from './modules/Hidraulica'
 import { Emissores } from './modules/Emissores'
 import { Bombagem } from './modules/Bombagem'
+import { Planeamento } from './modules/Planeamento'
+import { Simulacao } from './modules/Simulacao'
+import { Relatorio } from './modules/Relatorio'
 import { useBiblioteca } from './engine/library'
 
 const MODS: [string, string, string, number, string?][] = [
@@ -23,9 +26,9 @@ const MODS: [string, string, string, number, string?][] = [
   ['05', 'Dimensionamento hidráulico', 'Caudais, tubagens, perdas', 1],
   ['06', 'Aspersores e emissores', 'Débitos e distribuição', 1],
   ['07', 'Bombagem e energia', 'HMT, potência, consumo', 1],
-  ['08', 'Planeamento da rega', 'Dotações e calendários', 0, 'Fase 5'],
-  ['09', 'Simulação e análise', 'Cenários e desempenho', 0, 'Fase 5'],
-  ['10', 'Relatórios técnicos', 'Memória descritiva, PDF', 0, 'Fase 6'],
+  ['08', 'Planeamento da rega', 'Dotações e calendários', 1],
+  ['09', 'Simulação e análise', 'Cenários e desempenho', 1],
+  ['10', 'Relatórios técnicos', 'Memória descritiva, PDF', 1],
 ]
 
 export default function App() {
@@ -52,7 +55,7 @@ export default function App() {
 
   return (
     <Movimento>
-      <header className="sticky top-0 z-30 border-b border-line bg-white">
+      <header className="print:hidden sticky top-0 z-30 border-b border-line bg-white">
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-4 px-4 py-2.5">
           <a href="../" className="flex items-center gap-2.5 text-navy no-underline" aria-label="Imper Regas">
             <img src={logo} alt="Imper Regas" className="h-[38px] w-auto sm:h-[46px]" />
@@ -63,8 +66,8 @@ export default function App() {
           <Button asChild variant="outline"><a href="../"><ArrowLeft size={16} />Dimensionamento</a></Button>
         </div>
       </header>
-      <div className="mx-auto grid max-w-[1400px] items-start gap-4 p-3 lg:grid-cols-[260px_minmax(0,1fr)] lg:p-[18px]">
-        <aside className="flex gap-1.5 overflow-x-auto rounded-2xl bg-navy p-2 text-white lg:sticky lg:top-[84px] lg:block lg:p-3.5">
+      <div className="mx-auto grid max-w-[1400px] items-start gap-4 p-3 lg:grid-cols-[260px_minmax(0,1fr)] lg:p-[18px] print:block print:p-0">
+        <aside className="print:hidden flex gap-1.5 overflow-x-auto rounded-2xl bg-navy p-2 text-white lg:sticky lg:top-[84px] lg:block lg:p-3.5">
           <h3 className="mx-1.5 mb-2.5 mt-0.5 hidden text-[.78rem] uppercase tracking-[.12em] opacity-70 lg:block">Módulos</h3>
           {MODS.map((x) => {
             const on = x[0] === estado.mod
@@ -87,6 +90,9 @@ export default function App() {
           {estado.mod === '05' && <Hidraulica projeto={projeto} editar={editar} />}
           {estado.mod === '06' && <Emissores projeto={projeto} editar={editar} bib={bib} setBib={setBib} />}
           {estado.mod === '07' && <Bombagem projeto={projeto} editar={editar} bib={bib} setBib={setBib} />}
+          {estado.mod === '08' && <Planeamento projeto={projeto} editar={editar} />}
+          {estado.mod === '09' && <Simulacao projeto={projeto} editar={editar} />}
+          {estado.mod === '10' && <Relatorio projeto={projeto} />}
           {!m[3] && (
             <Card>
               <div className="px-5 py-10 text-center">
@@ -100,8 +106,8 @@ export default function App() {
           </Transicao>
         </main>
       </div>
-      <footer className="px-4 pb-8 pt-2.5 text-center text-[.78rem] text-mut">
-        Imper Regas Lda · Pivot Engineering v1.2 · Os resultados são indicativos e devem ser validados por um técnico antes da instalação.
+      <footer className="print:hidden px-4 pb-8 pt-2.5 text-center text-[.78rem] text-mut">
+        Imper Regas Lda · Pivot Engineering v2.0 · Os resultados são indicativos e devem ser validados por um técnico antes da instalação.
       </footer>
     </Movimento>
   )

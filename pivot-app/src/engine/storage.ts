@@ -3,6 +3,7 @@ import { agroPadrao } from './agro'
 import { hidPadrao } from './hydraulic'
 import { emitPadrao } from './emit'
 import { bombPadrao } from './pump'
+import { planPadrao, simPadrao } from './plan'
 
 // Mesma chave da versão HTML (pivot.html): os projetos já criados mantêm-se.
 export const KEY = 'ir_pivot'
@@ -20,6 +21,8 @@ export function novoProjeto(name = 'Novo projeto'): Projeto {
     hid: hidPadrao(),
     emit: emitPadrao(),
     bomb: bombPadrao(),
+    plan: planPadrao(),
+    sim: simPadrao(),
   }
 }
 
@@ -32,7 +35,7 @@ export function normalizar(q: Projeto): Projeto {
   const hid = { ...n.hid, ...(q.hid || {}) }
   if (!Array.isArray(hid.segs) || !hid.segs.length) hid.segs = n.hid.segs
   hid.segs = hid.segs.map((t) => ({ ...t, prices: t.prices || {} }))
-  return { ...n, ...q, par: { ...n.par, ...(q.par || {}) }, geo, agro, hid, emit: { ...n.emit, ...(q.emit || {}) }, bomb: { ...n.bomb, ...(q.bomb || {}) } }
+  return { ...n, ...q, par: { ...n.par, ...(q.par || {}) }, geo, agro, hid, emit: { ...n.emit, ...(q.emit || {}) }, bomb: { ...n.bomb, ...(q.bomb || {}) }, plan: { ...n.plan, ...(q.plan || {}) }, sim: { cen: Array.isArray(q.sim?.cen) && q.sim.cen.length ? q.sim.cen : n.sim.cen } }
 }
 
 export function carregar(): Estado {

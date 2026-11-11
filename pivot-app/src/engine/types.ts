@@ -57,6 +57,17 @@ export interface Bomb {
   tarifa: string    // €/kWh
   bombaSel: string
 }
+export interface Plano {
+  modo: 'raw' | 'fixo'
+  inicio: string      // data de início da simulação (vazio = data de sementeira)
+  intervalo: string   // dias entre regas (modo fixo)
+  gatilho: string     // % da RAW que dispara a rega (modo RAW)
+  dotMax: string      // dotação bruta máxima por rega (mm); vazio = sem limite
+  dr0: string         // esgotamento inicial (mm)
+  tvolta: string      // horas por volta completa a 100 % de velocidade
+}
+export interface Cenario { id: string; nome: string; et0: string; pe: string; kc: string; ef: string; horas: string }
+export interface Sim { cen: Cenario[] }
 export interface Projeto {
   id: string; name: string; client: string; loc: string; parcel: string
   areaTot: string; crop: string; water: string; tech: string
@@ -67,5 +78,7 @@ export interface Projeto {
   hid: Hid
   emit: Emit
   bomb: Bomb
+  plan: Plano
+  sim: Sim
 }
 export interface Estado { list: Projeto[]; cur: string; mod: string }
