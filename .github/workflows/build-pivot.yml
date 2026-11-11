@@ -1,0 +1,32 @@
+name: Compilar Pivot Engineering
+
+# Sempre que o código em pivot-app/ muda, compila e guarda o resultado na pasta pivot/
+on:
+  push:
+    branches: [main]
+    paths: ['pivot-app/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Instalar e compilar
+        working-directory: pivot-app
+        run: |
+          npm install
+          npm test
+          npm run build
+      - name: Guardar a pasta pivot/
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A pivot
+          if git diff --cached --quiet; then echo "Sem alterações"; else git commit -m "Compilar Pivot Engineering [automático]" && git push; fi
