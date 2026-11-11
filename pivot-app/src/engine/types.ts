@@ -37,6 +37,26 @@ export interface Hid {
   method: 'DW' | 'HW'
   segs: Troco[]
 }
+export interface ModeloEmissor {
+  id: string; tipo: string; fab: string; modelo: string; bocal: string
+  p: string      // pressão de referência / funcionamento (bar)
+  q: string      // caudal à pressão de referência (L/h)
+  wd: string     // diâmetro molhado (m)
+  s: string      // espaçamento (m)
+  h: string      // altura de instalação (m)
+  reg: string    // pressão do regulador (bar), vazio = sem regulador
+}
+export interface Emit extends Omit<ModeloEmissor, 'id'> { libId: string; Qg: string /* caudal do canhão (m³/h) */ }
+export interface PontoBomba { q: string; h: string; eta: string }
+export interface ModeloBomba { id: string; fab: string; modelo: string; tipo: string; motorKw: string; pontos: PontoBomba[] }
+export interface Biblioteca { emit: ModeloEmissor[]; bombas: ModeloBomba[] }
+export interface Bomb {
+  cotaCapt: string; cotaPivot: string; nivDin: string
+  margemH: string   // margem de segurança na HMT (%)
+  etaB: string; etaM: string; margemM: string
+  tarifa: string    // €/kWh
+  bombaSel: string
+}
 export interface Projeto {
   id: string; name: string; client: string; loc: string; parcel: string
   areaTot: string; crop: string; water: string; tech: string
@@ -45,5 +65,7 @@ export interface Projeto {
   geo: Geo
   agro: Agro
   hid: Hid
+  emit: Emit
+  bomb: Bomb
 }
 export interface Estado { list: Projeto[]; cur: string; mod: string }

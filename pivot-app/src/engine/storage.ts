@@ -1,6 +1,8 @@
 import type { Estado, Projeto } from './types'
 import { agroPadrao } from './agro'
 import { hidPadrao } from './hydraulic'
+import { emitPadrao } from './emit'
+import { bombPadrao } from './pump'
 
 // Mesma chave da versão HTML (pivot.html): os projetos já criados mantêm-se.
 export const KEY = 'ir_pivot'
@@ -16,6 +18,8 @@ export function novoProjeto(name = 'Novo projeto'): Projeto {
     geo: { spans: [60, 60, 60, 60, 60, 60], lb: 20, gun: false, G: 0, theta: 360, start: 0, ox: 0, oy: 0 },
     agro: agroPadrao(),
     hid: hidPadrao(),
+    emit: emitPadrao(),
+    bomb: bombPadrao(),
   }
 }
 
@@ -28,7 +32,7 @@ export function normalizar(q: Projeto): Projeto {
   const hid = { ...n.hid, ...(q.hid || {}) }
   if (!Array.isArray(hid.segs) || !hid.segs.length) hid.segs = n.hid.segs
   hid.segs = hid.segs.map((t) => ({ ...t, prices: t.prices || {} }))
-  return { ...n, ...q, par: { ...n.par, ...(q.par || {}) }, geo, agro, hid }
+  return { ...n, ...q, par: { ...n.par, ...(q.par || {}) }, geo, agro, hid, emit: { ...n.emit, ...(q.emit || {}) }, bomb: { ...n.bomb, ...(q.bomb || {}) } }
 }
 
 export function carregar(): Estado {

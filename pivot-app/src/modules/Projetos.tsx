@@ -6,7 +6,8 @@ import { hoje, normalizar, novoProjeto, uid } from '../engine/storage'
 import { Card, Field, Kpi, Progresso, Select } from '../components/ui'
 import { progresso } from '../engine/progress'
 import { AWC_TIPICO, calcAgro } from '../engine/agro'
-import { caudalSistema } from '../engine/hydraulic'
+import { caudalSistema, calcHid } from '../engine/hydraulic'
+import { calcHmt, calcPotencias } from '../engine/pump'
 
 interface Props {
   estado: Estado
@@ -19,6 +20,9 @@ export function Projetos({ estado, projeto: p, setEstado, editar }: Props) {
   const c = calcGeo(p.geo)
   const pg = progresso(p)
   const agro = calcAgro(p.agro, c.As, AWC_TIPICO[p.par.soil] ?? null)
+  const hidR = calcHid(p.hid, caudalSistema(agro.nbruta, c.As, Number(String(p.hid.horas).replace(',', '.'))))
+  const hmtR = calcHmt(p.bomb, hidR.pcM, hidR.somaHf + hidR.somaHl)
+  const potR = hidR.Q ? calcPotencias(hidR.Q, hmtR.total, Number(p.bomb.etaB) || 0, Number(p.bomb.etaM) || 0, Number(p.bomb.margemM) || 0) : null
   const q = caudalSistema(agro.nbruta, c.As, Number(String(p.hid.horas).replace(',', '.')))
   const [arq, setArq] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -79,11 +83,11 @@ export function Projetos({ estado, projeto: p, setEstado, editar }: Props) {
           <Kpi label="Área irrigada" value={fmt(c.As, 2)} unit="ha" />
           <Kpi label="Raio do pivot" value={fmt(c.R, 0)} unit="m" />
           <Kpi label="Caudal de projeto" value={fmt(q, 1)} unit="m³/h" dim={q === null} />
-          <Kpi label="Potência estimada" value="—" unit="kW" dim />
+          <Kpi label="Potência estimada" value={potR && Number.isFinite(potR.Pa) ? fmt(potR.Pa, 1) : '—'} unit="kW" dim={!potR} />
         </div>
         <h3 className="mb-2 mt-4 text-[.95rem] font-bold text-navy">Progresso do dimensionamento</h3>
         <Progresso label="Projeto" pct={pg.proj} /><Progresso label="Parcela" pct={pg.par} /><Progresso label="Geometria" pct={pg.geo} />
-        <Progresso label="Agronomia" pct={pg.agro} /><Progresso label="Hidráulica" pct={pg.hid} /><Progresso label="Bombagem" pct={0} />
+        <Progresso label="Agronomia" pct={pg.agro} /><Progresso label="Hidráulica" pct={pg.hid} /><Progresso label="Emissores" pct={pg.emit} /><Progresso label="Bombagem" pct={pg.bomb} />
       </Card>
 
       <Card title="Ficha do projeto">

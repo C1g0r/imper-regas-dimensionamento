@@ -9,6 +9,9 @@ import { Parcela } from './modules/Parcela'
 import { Geometria } from './modules/Geometria'
 import { Agronomia } from './modules/Agronomia'
 import { Hidraulica } from './modules/Hidraulica'
+import { Emissores } from './modules/Emissores'
+import { Bombagem } from './modules/Bombagem'
+import { useBiblioteca } from './engine/library'
 
 const MODS: [string, string, string, number, string?][] = [
   ['01', 'Projetos e explorações', 'Criar, editar e gerir projetos', 1],
@@ -16,8 +19,8 @@ const MODS: [string, string, string, number, string?][] = [
   ['03', 'Dimensionamento geométrico', 'Raio, vãos, torres e área', 1],
   ['04', 'Dimensionamento agronómico', 'Culturas, ET0, Kc', 1],
   ['05', 'Dimensionamento hidráulico', 'Caudais, tubagens, perdas', 1],
-  ['06', 'Aspersores e emissores', 'Débitos e distribuição', 0, 'Fase 4'],
-  ['07', 'Bombagem e energia', 'HMT, potência, consumo', 0, 'Fase 4'],
+  ['06', 'Aspersores e emissores', 'Débitos e distribuição', 1],
+  ['07', 'Bombagem e energia', 'HMT, potência, consumo', 1],
   ['08', 'Planeamento da rega', 'Dotações e calendários', 0, 'Fase 5'],
   ['09', 'Simulação e análise', 'Cenários e desempenho', 0, 'Fase 5'],
   ['10', 'Relatórios técnicos', 'Memória descritiva, PDF', 0, 'Fase 6'],
@@ -25,6 +28,7 @@ const MODS: [string, string, string, number, string?][] = [
 
 export default function App() {
   const [estado, setEstadoRaw] = useState<Estado>(carregar)
+  const [bib, setBib] = useBiblioteca()
   const [msg, setMsg] = useState('')
   const t = useRef<number>()
   const setEstado = useCallback((f: (e: Estado) => Estado) => setEstadoRaw(f), [])
@@ -77,6 +81,8 @@ export default function App() {
           {estado.mod === '03' && <Geometria projeto={projeto} editar={editar} />}
           {estado.mod === '04' && <Agronomia projeto={projeto} editar={editar} />}
           {estado.mod === '05' && <Hidraulica projeto={projeto} editar={editar} />}
+          {estado.mod === '06' && <Emissores projeto={projeto} editar={editar} bib={bib} setBib={setBib} />}
+          {estado.mod === '07' && <Bombagem projeto={projeto} editar={editar} bib={bib} setBib={setBib} />}
           {!m[3] && (
             <Card>
               <div className="px-5 py-10 text-center">
@@ -90,7 +96,7 @@ export default function App() {
         </main>
       </div>
       <footer className="px-4 pb-8 pt-2.5 text-center text-[.78rem] text-mut">
-        Imper Regas Lda · Pivot Engineering v1.1 · Os resultados são indicativos e devem ser validados por um técnico antes da instalação.
+        Imper Regas Lda · Pivot Engineering v1.2 · Os resultados são indicativos e devem ser validados por um técnico antes da instalação.
       </footer>
     </>
   )
