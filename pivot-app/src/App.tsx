@@ -7,13 +7,15 @@ import { Card } from './components/ui'
 import { Projetos } from './modules/Projetos'
 import { Parcela } from './modules/Parcela'
 import { Geometria } from './modules/Geometria'
+import { Agronomia } from './modules/Agronomia'
+import { Hidraulica } from './modules/Hidraulica'
 
 const MODS: [string, string, string, number, string?][] = [
   ['01', 'Projetos e explorações', 'Criar, editar e gerir projetos', 1],
   ['02', 'Caracterização da parcela', 'Localização, terreno e solo', 1],
   ['03', 'Dimensionamento geométrico', 'Raio, vãos, torres e área', 1],
-  ['04', 'Dimensionamento agronómico', 'Culturas, ET0, Kc', 0, 'Fase 3'],
-  ['05', 'Dimensionamento hidráulico', 'Caudais, tubagens, perdas', 0, 'Fase 3'],
+  ['04', 'Dimensionamento agronómico', 'Culturas, ET0, Kc', 1],
+  ['05', 'Dimensionamento hidráulico', 'Caudais, tubagens, perdas', 1],
   ['06', 'Aspersores e emissores', 'Débitos e distribuição', 0, 'Fase 4'],
   ['07', 'Bombagem e energia', 'HMT, potência, consumo', 0, 'Fase 4'],
   ['08', 'Planeamento da rega', 'Dotações e calendários', 0, 'Fase 5'],
@@ -73,6 +75,8 @@ export default function App() {
           {estado.mod === '01' && <Projetos estado={estado} projeto={projeto} setEstado={setEstado} editar={editar} />}
           {estado.mod === '02' && <Parcela projeto={projeto} editar={editar} />}
           {estado.mod === '03' && <Geometria projeto={projeto} editar={editar} />}
+          {estado.mod === '04' && <Agronomia projeto={projeto} editar={editar} />}
+          {estado.mod === '05' && <Hidraulica projeto={projeto} editar={editar} />}
           {!m[3] && (
             <Card>
               <div className="px-5 py-10 text-center">
@@ -86,7 +90,7 @@ export default function App() {
         </main>
       </div>
       <footer className="px-4 pb-8 pt-2.5 text-center text-[.78rem] text-mut">
-        Imper Regas Lda · Pivot Engineering v1.0 · Os resultados são indicativos e devem ser validados por um técnico antes da instalação.
+        Imper Regas Lda · Pivot Engineering v1.1 · Os resultados são indicativos e devem ser validados por um técnico antes da instalação.
       </footer>
     </>
   )

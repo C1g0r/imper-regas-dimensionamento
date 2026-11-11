@@ -21,4 +21,4 @@ Faça commit e push dessa pasta (e das alterações) para publicar no GitHub Pag
 - `src/engine/` motor de cálculo (sem React): geometria, parcela, alertas, progresso, armazenamento
 - `src/components/` componentes visuais (desenho SVG do pivot, campos, alertas)
 - `src/modules/` módulos 01 Projetos, 02 Parcela, 03 Geometria
-- Módulos 04–10 estão preparados na navegação (`src/App.tsx`) e ainda por implementar
+- Módulos 04 (agronómico) e 05 (hidráulico) implementados; 06–10 preparados na navegação (`src/App.tsx`)

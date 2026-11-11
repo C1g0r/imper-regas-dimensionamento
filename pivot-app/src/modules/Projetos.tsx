@@ -5,6 +5,8 @@ import { calcGeo, fmt } from '../engine/geometry'
 import { hoje, normalizar, novoProjeto, uid } from '../engine/storage'
 import { Card, Field, Kpi, Progresso, Select } from '../components/ui'
 import { progresso } from '../engine/progress'
+import { AWC_TIPICO, calcAgro } from '../engine/agro'
+import { caudalSistema } from '../engine/hydraulic'
 
 interface Props {
   estado: Estado
@@ -16,6 +18,8 @@ interface Props {
 export function Projetos({ estado, projeto: p, setEstado, editar }: Props) {
   const c = calcGeo(p.geo)
   const pg = progresso(p)
+  const agro = calcAgro(p.agro, c.As, AWC_TIPICO[p.par.soil] ?? null)
+  const q = caudalSistema(agro.nbruta, c.As, Number(String(p.hid.horas).replace(',', '.')))
   const [arq, setArq] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const lista = estado.list.filter((q) => arq || !q.arch)
@@ -74,12 +78,12 @@ export function Projetos({ estado, projeto: p, setEstado, editar }: Props) {
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <Kpi label="Área irrigada" value={fmt(c.As, 2)} unit="ha" />
           <Kpi label="Raio do pivot" value={fmt(c.R, 0)} unit="m" />
-          <Kpi label="Caudal de projeto" value="—" unit="m³/h" dim />
+          <Kpi label="Caudal de projeto" value={fmt(q, 1)} unit="m³/h" dim={q === null} />
           <Kpi label="Potência estimada" value="—" unit="kW" dim />
         </div>
         <h3 className="mb-2 mt-4 text-[.95rem] font-bold text-navy">Progresso do dimensionamento</h3>
         <Progresso label="Projeto" pct={pg.proj} /><Progresso label="Parcela" pct={pg.par} /><Progresso label="Geometria" pct={pg.geo} />
-        <Progresso label="Agronomia" pct={0} /><Progresso label="Hidráulica" pct={0} /><Progresso label="Bombagem" pct={0} />
+        <Progresso label="Agronomia" pct={pg.agro} /><Progresso label="Hidráulica" pct={pg.hid} /><Progresso label="Bombagem" pct={0} />
       </Card>
 
       <Card title="Ficha do projeto">
