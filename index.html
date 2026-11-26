@@ -195,6 +195,16 @@ section.res{border:1px solid var(--g-bd);border-top:2px solid var(--neon2);box-s
 #pm .pmh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}#pm .pmh h2{margin:0}#pm .pmh button{margin:0}
 #pm .pit{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #e3ebf3}#pm .pitb{display:flex;gap:4px}#pm .pitb button{margin:0;padding:6px 10px}
 #pr .ps{margin:16px 0 0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;page-break-inside:avoid}#pr .ps .tip{display:none}#pr .ps:first-of-type{margin-top:10px}
+#gsbar{display:flex;align-items:center;gap:8px;margin:8px 0 6px;flex-wrap:wrap}#gsbar .gsc{display:flex;gap:6px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}#gsbar .gsc::-webkit-scrollbar{display:none}
+#gsbar .gsc button{display:inline-flex;align-items:center;gap:6px;margin:0;padding:7px 12px;border-radius:999px;background:#fff;color:var(--ink);border:1px solid var(--line);font-size:.85rem;font-weight:600;white-space:nowrap;box-shadow:none}
+#gsbar .gsc i{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#e3ebf3;font-style:normal;font-size:.75rem}
+#gsbar .gsc button.on{background:#1677c8;color:#fff;border-color:#1677c8}#gsbar .gsc button.on i{background:rgba(255,255,255,.25)}
+#gsbar .gsc button.ok i{background:#2fa84f;color:#fff;font-size:0}#gsbar .gsc button.ok i::before{content:'✓';font-size:.75rem}
+#gstg{margin:0;padding:7px 12px;font-size:.82rem}#mA:not(.gd) .gsc,#mA:not(.gd) #gsnav,#mA:not(.gd) #gse{display:none}
+#gsnav{display:flex;justify-content:space-between;gap:8px;margin:6px 0 14px}#gsnav button{margin:0}#gsnav [hidden],#gsbar [hidden],#mA [hidden].hint{display:none}
+#mA.gd:not([hidden]){display:flex;flex-direction:column}#mA.gd>*{order:5}#mA.gd>h1{order:-4}#mA.gd>.sub{order:-3}#mA.gd>#gsbar{order:-2}#mA.gd>#gsh{order:-1}#mA.gd>#gsnav{order:20}#mA.gd>#gse{order:19}#mA.gd>section{display:none}
+#mA.gd[data-st="1"]>[data-role="sit"],#mA.gd[data-st="2"]>[data-role="area"],#mA.gd[data-st="3"]>[data-role="pres"],#mA.gd[data-st="4"]>[data-role="list"],#mA.gd[data-st="4"]>[data-role="res"],#mA.gd[data-st="4"]>[data-role="adet"],#mA.gd[data-st="2"]>[data-role="res"],#mA.gd[data-st="5"]>[data-role="achs"]:not([hidden]){display:block}
+#mA.gd[data-st="2"]>[data-role="area"],#mA.gd[data-st="4"]>[data-role="list"]{order:0}#mA.gd[data-st="2"]>[data-role="res"],#mA.gd[data-st="4"]>[data-role="res"]{order:1}#mA.gd[data-st="4"]>[data-role="adet"]{order:2}
 #mpv.big{height:min(86vh,880px)}.mres{display:flex;flex-direction:column;gap:4px;margin:-2px 0 8px}.mres button{text-align:left;margin:0;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:.85rem;font-weight:500;color:var(--ink);cursor:pointer;line-height:1.3}.mres .hint{margin:2px 0}
 #mpv{position:relative;height:min(62vh,540px);min-height:340px;margin:8px 0;border-radius:14px;overflow:hidden;background:#cfd8dc;touch-action:none;cursor:grab;border:1px solid var(--line);user-select:none;-webkit-user-select:none}
 .mctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px;z-index:3}.mctl button{margin:0;width:36px;height:36px;padding:0;font-size:1.25rem;border-radius:10px}
@@ -247,8 +257,8 @@ body.home main,body.about main{display:none}
 .sm{max-width:44ch;margin:0 0 22px;color:#27425f}
 .cta2{display:inline-flex;align-items:center;gap:10px;margin:0;padding:13px 26px;border-radius:999px;background:var(--brand);font-weight:700;font-size:1rem}
 /* cartões de módulo */
-.mcs{max-width:1280px;margin:-58px auto 0;padding:0 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;background:none;border:0;box-shadow:none}
-.mc{background:linear-gradient(180deg,#fff,#eef5fc);border:1px solid #fff;border-radius:22px;box-shadow:0 14px 36px rgba(13,47,92,.14);padding:10px;display:flex;flex-direction:column}
+.mcs{max-width:1280px;margin:-58px auto 0;padding:0 20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;position:relative;background:none;border:0;box-shadow:none}
+.mc{min-width:0;background:linear-gradient(180deg,#fff,#eef5fc);border:1px solid #fff;border-radius:22px;box-shadow:0 14px 36px rgba(13,47,92,.14);padding:10px;display:flex;flex-direction:column}
 .mc .ph{width:100%;height:150px;object-fit:cover;border-radius:16px 16px 6px 6px;display:block}
 .mb{position:relative;padding:0 14px 14px;display:flex;flex-direction:column;flex:1}
 .mt{padding-left:104px;margin-top:-34px;min-height:72px;position:relative}
@@ -289,6 +299,7 @@ main{max-width:1180px;padding-top:22px}
 .nv:focus{outline:0}.nv:focus-visible,.cta2:focus-visible{outline:2px solid var(--aqua);outline-offset:2px}
 
 .orgt{margin:0 0 0 6px;padding:9px 14px;border-radius:999px;background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none;font-weight:600;font-size:.85rem;white-space:nowrap}.orgt:hover{background:#eaf2fa;box-shadow:none}
+@media(min-width:861px) and (max-width:1099px){.hd{flex-wrap:wrap;gap:6px 12px}.nvs{order:3;flex:1 0 100%;overflow-x:auto;scrollbar-width:none}.nvs::-webkit-scrollbar{display:none}}
 body.orgm .orgt{background:var(--brand2);color:#fff;border-color:var(--brand2)}
 .orgm .og{position:relative;outline:2px dashed var(--aqua);outline-offset:3px}
 .orgm .nv.og,.orgm .stb.og,.orgm #avt .tab.og{cursor:grab;touch-action:none;user-select:none}
@@ -409,11 +420,13 @@ body.orgf{cursor:move}body.orgf *{-webkit-user-select:none;user-select:none}
 <div id="mA" hidden>
 <h1>Aspersão / Pulverizadores e Bicos</h1>
 <p class="sub">Defina a área, escolha o modelo e veja os bicos, o número de unidades e o desenho final.</p>
-<section style="padding:14px"><h2>Situação</h2><div class="grid">
+<div id="gsbar" role="navigation" aria-label="Passos da aspersão"><div class="gsc"><button type="button" data-s="1"><i>1</i><span>Situação</span></button><button type="button" data-s="2"><i>2</i><span>Terreno</span></button><button type="button" data-s="3"><i>3</i><span>Pressão</span></button><button type="button" data-s="4"><i>4</i><span>Modelo</span></button><button type="button" data-s="5"><i>5</i><span>Escolha</span></button></div><button type="button" class="btn2" id="gstg">Ver tudo</button></div>
+<p class="hint" id="gsh"></p>
+<section style="padding:14px" data-role="sit"><h2>Situação</h2><div class="grid">
 <label class="full">Onde vai regar?<select id="ast"><option value="r">Relvado e jardim</option><option value="c">Canteiros, sebes e arbustos</option><option value="f">Faixas estreitas e bermas</option><option value="g">Grandes áreas, parques e campos desportivos</option><option value="a">Qualquer situação</option></select></label>
 <div class="full"><div class="subtabs"><button type="button" class="stb on" data-tp="aspersor">Aspersores</button><button type="button" class="stb" data-tp="pulverizador">Pulverizadores e bicos</button></div><input id="atp" type="hidden" value="aspersor"></div>
 </div></section>
-<section style="padding:14px"><h2>Área a regar</h2><div class="grid">
+<section style="padding:14px" data-role="area"><h2>Área a regar</h2><div class="grid">
 <label class="full">Forma da área<select id="ash"><option value="ret">Retângulo</option><option value="area">Só tenho a área (m²)</option><option value="L">Forma em L</option><option value="tri">Triângulo</option><option value="trap">Trapézio</option><option value="circ">Círculo</option><option value="free">Desenhar à mão (clicar no quadro)</option></select></label>
 <label id="apl1"><span>Comprimento (m)</span><input id="ap1" type="number" inputmode="decimal" value="20"></label>
 <label id="apl2"><span>Largura (m)</span><input id="ap2" type="number" inputmode="decimal" value="12"></label>
@@ -424,15 +437,15 @@ body.orgf{cursor:move}body.orgf *{-webkit-user-select:none;user-select:none}
 </div>
 <div id="afreeb" hidden style="margin-top:8px"><button class="btn2" type="button" id="afu">Anular último ponto</button> <button class="btn2" type="button" id="afc">Limpar</button><p class="hint">Toque no quadro para marcar os cantos da área (mínimo 3 pontos), em passos de 0,5 m.</p></div>
 <div id="abase" style="margin-top:10px"></div></section>
-<section style="padding:14px"><h2>Pressão e caudal</h2>
+<section style="padding:14px" data-role="pres"><h2>Pressão e caudal</h2>
 <label class="chk"><input type="checkbox" id="ap">Contar com a bomba escolhida no separador Bombas</label>
 <div id="apinfo" class="hint"></div>
 <div class="grid" style="margin-top:8px"><label>Pressão disponível (bar)<input id="apr" type="number" inputmode="decimal" value="3" step="0.1"></label>
 <label>Caudal disponível (m³/h)<input id="aq" type="number" inputmode="decimal" value="2" step="0.1"></label></div></section>
-<section id="achs" class="res" style="padding:14px" hidden></section>
-<section style="padding:14px"><h2 id="alh">Modelos</h2><div id="alist"></div></section>
-<section style="padding:14px"><div id="adet"></div></section>
-<section class="res"><div class="tabs" id="avt" style="margin:0 0 12px"><button type="button" class="tab on" id="avd">Desenho da rega</button><button type="button" class="tab" id="avm">Mapa</button></div><div id="adw"><p class="hint">Escolha um modelo para ver o desenho.</p></div>
+<section id="achs" data-role="achs" class="res" style="padding:14px" hidden></section>
+<section style="padding:14px" data-role="list"><h2 id="alh">Modelos</h2><div id="alist"></div></section>
+<section style="padding:14px" data-role="adet"><div id="adet"></div></section>
+<section class="res" data-role="res"><div class="tabs" id="avt" style="margin:0 0 12px"><button type="button" class="tab on" id="avd">Desenho da rega</button><button type="button" class="tab" id="avm">Mapa</button></div><div id="adw"><p class="hint">Escolha um modelo para ver o desenho.</p></div>
 <div id="amap" hidden>
 <div class="grid" style="margin-bottom:8px"><label>Mapa<select id="mprov"><option value="free">Gratuito (satélite Esri / OpenStreetMap)</option><option value="google">Google Maps (com chave)</option></select></label><label>Vista<select id="mlay"><option value="sat">Satélite</option><option value="hyb">Satélite com nomes</option><option value="map">Mapa</option></select></label></div>
 <div id="mkeyb" hidden class="box" style="margin-bottom:8px"><label>Chave da API do Google Maps<input id="mkey" type="text" autocomplete="off" placeholder="AIza…"></label><button class="btn2" type="button" id="mkeyok">Usar esta chave</button><p class="hint">Crie a chave em console.cloud.google.com (ative “Maps JavaScript API” e a faturação) e restrinja-a ao endereço deste site. Fica guardada só neste navegador.</p></div>
@@ -444,6 +457,7 @@ body.orgf{cursor:move}body.orgf *{-webkit-user-select:none;user-select:none}
 <p class="hint" id="mmsg"></p><div id="msum" class="box"></div>
 <p class="hint">O terreno desenhado no mapa passa a ser a área usada no cálculo (medida em metros reais). Arraste os pontos verdes para os mover e os amarelos para ajustar o contorno; toque no círculo pequeno a meio de um lado para acrescentar um ponto, e duas vezes num ponto amarelo para o apagar. As opções de Espaçamento e de modelo valem tal como no desenho.</p></div>
 <p class="hint" id="adh">No modo Económico procura-se o menor número de unidades que cobre toda a área, mantendo a uniformidade perto da disposição cabeça a cabeça (espaçamento igual ao raio), que pode escolher em Espaçamento. Os arcos de cada unidade ajustam-se aos cantos e bordos da área. A zona a laranja tracejado mostra o alcance total de cada unidade, incluindo a água que cai fora da área. Caudais em m³/h por unidade. Catálogo Cudell 2026.</p></section>
+<div id="gsnav"><button class="btn2" type="button" id="gsb">← Anterior</button><button type="button" id="gsn">Seguinte →</button></div><p class="hint" id="gse" hidden>Ainda não escolheu um modelo. Volte ao passo 4 e carregue em “Escolher”.</p>
 </div>
 <div id="mR" hidden>
 <h1>Rega e tubagem</h1>
@@ -1056,7 +1070,7 @@ var pm=t.closest('#alist .pm');if(pm){ASEL=pm.dataset.id;ANZ=null;ALOPEN=false;a
 var tb=t.closest('.stb');if(tb){$('atp').value=tb.dataset.tp;document.querySelectorAll('.stb').forEach(function(x){x.classList.toggle('on',x===tb)});ASEL=null;ANZ=null;ALOPEN=false;asp();return}
 var nz=t.closest('#adet .nz');if(nz&&nz.dataset.i!=null){ANZ=+nz.dataset.i;asp();return}
 if(t.closest('#atab')&&ASEL){aOpenS(aGet(ASEL),g('apr'));return}
-if(t.closest('#acho')&&ALAST){var A0=Math.abs(pArea(ALAST.poly));ACH={sid:ALAST.s.id,nz:ANZ,e:JSON.parse(JSON.stringify(ALAST.e)),poly:ALAST.poly.map(function(q){return [q[0],q[1]]}),P:g('apr'),A:A0,sit:$('ast').options[$('ast').selectedIndex].text,shape:$('ash').options[$('ash').selectedIndex].text};aSave();asp();return}
+if(t.closest('#acho')&&ALAST){var A0=Math.abs(pArea(ALAST.poly));ACH={sid:ALAST.s.id,nz:ANZ,e:JSON.parse(JSON.stringify(ALAST.e)),poly:ALAST.poly.map(function(q){return [q[0],q[1]]}),P:g('apr'),A:A0,sit:$('ast').options[$('ast').selectedIndex].text,shape:$('ash').options[$('ash').selectedIndex].text};aSave();asp();if(GS.on)gsGo(5);return}
 if(t.closest('#achp')){aPrint();return}
 if(t.closest('#achadd,#apriadd')){aAdd();return}
 if(t.closest('#achx')){ACH=null;aSave();asp();return}
@@ -1097,6 +1111,22 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('pm').hi
 $('ppa').addEventListener('click',function(){PADD=1;try{$('pp').click()}finally{PADD=0}});
 $('rppa').addEventListener('click',function(){PADD=1;try{$('rpp').click()}finally{PADD=0}});
 pCount();
+
+/* ===== Aspersão passo a passo (o modo "Ver tudo" mantém todos os blocos) ===== */
+var GS={on:true,st:1};try{GS.on=localStorage.getItem('ir_gd')!=='0'}catch(x){}
+var GSH=['Escolha onde vai regar e se prefere aspersores ou pulverizadores e bicos.','Indique as medidas ou desenhe o terreno no mapa de satélite.','Indique a pressão disponível, ou conte com a bomba escolhida no separador Bombas.','Compare os modelos, escolha o bico e veja o desenho. Carregue em “Escolher” para o cliente.','A escolha guardada para o cliente: imprimir ou juntar à proposta.'];
+function gsDone(n){if(n===1)return true;if(n===2)return $('ash').value==='free'?AFREE.length>=3:g('ap1')>0;if(n===3)return g('apr')>0||$('ap').checked;if(n===4)return !!ASEL;return !!ACH}
+function gsApply(){var m=$('mA');m.classList.toggle('gd',GS.on);m.setAttribute('data-st',GS.st);
+[].forEach.call(document.querySelectorAll('#gsbar .gsc button'),function(b){var n=+b.dataset.s;b.classList.toggle('on',GS.on&&n===GS.st);b.classList.toggle('ok',GS.on&&n!==GS.st&&gsDone(n));if(GS.on&&n===GS.st)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current')});
+$('gstg').textContent=GS.on?'Ver tudo':'Passo a passo';$('gsh').textContent=GSH[GS.st-1];$('gsh').hidden=!GS.on;
+$('gsb').hidden=GS.st===1;$('gsn').hidden=GS.st===5;$('gse').hidden=!(GS.on&&GS.st===5&&$('achs').hidden)}
+function gsGo(n){GS.st=Math.max(1,Math.min(5,n));gsApply();if(GS.on){if(GS.st===2&&!MP.vis)mShow(true);if(GS.st===4&&MP.vis)mShow(false)}var b=$('gsbar').getBoundingClientRect();if(b.top<0)window.scrollTo({top:b.top+window.scrollY-70})}
+[].forEach.call(document.querySelectorAll('#gsbar .gsc button'),function(b){b.addEventListener('click',function(){gsGo(+b.dataset.s)})});
+$('gsb').addEventListener('click',function(){gsGo(GS.st-1)});$('gsn').addEventListener('click',function(){gsGo(GS.st+1)});
+$('gstg').addEventListener('click',function(){GS.on=!GS.on;try{localStorage.setItem('ir_gd',GS.on?'1':'0')}catch(x){}gsApply();if(GS.on)gsGo(GS.st)});
+document.addEventListener('click',function(e){if(GS.on&&e.target.closest&&e.target.closest('#orgb')){GS.on=false;gsApply()}},true);
+['input','change','click'].forEach(function(ev){$('mA').addEventListener(ev,function(){setTimeout(gsApply,0)})});
+gsApply();
 addTips();
 markCat();
 calc();
